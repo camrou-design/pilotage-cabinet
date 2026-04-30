@@ -2,193 +2,368 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Canvas projet — Pilotage des réformes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Canvas projets — Cabinet Desquesnes</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --blue:#2f75b5;
-  --blue-dark:#1f4e79;
-  --light:#d9eaf7;
-  --border:#8d8d8d;
-  --ink:#111;
-  --muted:#555;
-  --bg:#f4f5f7;
-  --white:#fff;
-  --green:#1f7a3f;
-  --green-bg:#e7f6ec;
-  --red:#a61b1b;
-  --red-bg:#fdecec;
-  --amber:#b36b00;
-  --amber-bg:#fff4de;
+  --ink:#12120F; --ink2:#2C2C28; --muted:#6B6B62;
+  --border:#E4E3DC; --surface:#FAFAF7; --card:#FFFFFF;
+  --gold:#B8860B; --gold-l:#FDF8EC;
+  --emerald:#1A6B45; --emerald-l:#EDF7F1;
+  --amber:#B54708; --amber-l:#FEF4EC;
+  --crimson:#9B1C1C; --crimson-l:#FDF2F2;
+  --slate:#374151; --slate-l:#F1F5F9;
+  --blue:#1D4ED8; --blue-l:#EFF6FF;
+  --r4:4px; --r8:8px; --r12:12px; --r20:20px;
+  --shadow:0 2px 8px rgba(0,0,0,.07);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --ff-head:'Roboto Slab',serif;
+  --ff-body:'Roboto',sans-serif;
+  --ff-mono:'Roboto Mono',monospace;
+  --tr:160ms cubic-bezier(.4,0,.2,1);
 }
-*{box-sizing:border-box}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;padding:20px;color:var(--ink)}
-.app{max-width:1280px;margin:0 auto}
-.header{background:#fff;border:1px solid #ddd;border-radius:10px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-h1{font-size:22px;margin:0 0 6px;color:#111}.subtitle{font-size:13px;color:var(--muted);line-height:1.45}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:none;border-radius:6px;padding:9px 13px;font-weight:700;cursor:pointer;font-size:13px}.btn-primary{background:#111;color:#fff}.btn-blue{background:var(--blue);color:#fff}.btn-green{background:var(--green);color:#fff}.btn-amber{background:var(--amber);color:#fff}.btn-red{background:var(--red);color:#fff}.btn-ghost{background:#e9e9e9;color:#222}.btn:hover{filter:brightness(.96)}
-.layout{display:grid;grid-template-columns:290px 1fr;gap:16px}.side{background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);height:fit-content;position:sticky;top:16px}.side-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:10px}.project-list{display:flex;flex-direction:column;gap:6px}.project-item{border:1px solid #ddd;background:#fff;border-radius:7px;padding:9px;cursor:pointer}.project-item.active{border-color:var(--blue);background:#eef6ff}.project-name{font-weight:700;font-size:13px}.project-meta{font-size:11px;color:#666;margin-top:3px}.status{display:inline-block;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:700;margin-top:5px}.status.ok{background:var(--green-bg);color:var(--green)}.status.pending{background:var(--amber-bg);color:var(--amber)}.status.rejected{background:var(--red-bg);color:var(--red)}
-.main{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}.project-head{display:grid;grid-template-columns:1.5fr 1fr 160px 110px;gap:10px;margin-bottom:14px}.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#555;font-weight:700;margin-bottom:4px}.field input,.field select,.field textarea{width:100%;border:1px solid #bbb;border-radius:5px;padding:8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;background:#fff}.field textarea{min-height:70px;resize:vertical}.validation-strip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:14px}.validation-strip strong{font-size:13px}.validation-strip span{font-size:12px}.canvas-wrap{overflow:auto}
-.canvas-table{width:100%;border-collapse:collapse;background:#fff;font-size:12px}.canvas-table th,.canvas-table td{border:1px solid var(--border);padding:7px;vertical-align:top}.canvas-table th{background:var(--blue);color:#fff;text-align:left;font-weight:700}.canvas-table .num{width:42px;text-align:center;background:var(--blue);color:#fff;font-weight:700;font-size:14px}.canvas-table .bloc{width:190px;background:var(--light);font-weight:700}.canvas-table .question{line-height:1.35}.canvas-table .answer{width:38%}.canvas-table textarea{width:100%;min-height:92px;border:1px solid #bbb;border-radius:4px;padding:7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;resize:vertical;background:#fff}.canvas-table textarea:focus{outline:2px solid rgba(47,117,181,.25);border-color:var(--blue)}
-.validation-panel{margin-top:16px;border:1px solid #ccc;border-radius:8px;background:#fbfbfb;padding:14px}.panel-title{font-weight:700;margin-bottom:10px}.validation-form{display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:10px;align-items:end}.validation-log{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.validation-log th,.validation-log td{border:1px solid #ccc;padding:6px;vertical-align:top}.validation-log th{background:#333;color:#fff;text-align:left}.pdf-area{background:#fff}.pdf-title{display:none}.pdf-meta{display:none}.toast{position:fixed;right:20px;bottom:20px;background:#111;color:#fff;padding:10px 14px;border-radius:7px;display:none;z-index:9999;font-size:13px}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.project-head,.validation-form{grid-template-columns:1fr}.canvas-table{font-size:11px}.canvas-table .answer{width:auto}}
-@media print{body{background:#fff;padding:0}.header,.side,.toolbar,.validation-form,.no-print{display:none!important}.layout{display:block}.main{box-shadow:none;border:none;padding:0}.pdf-title,.pdf-meta{display:block}.canvas-table textarea{border:none;resize:none;min-height:70px}.validation-panel{break-inside:avoid}.canvas-table tr{break-inside:avoid}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--ff-body);background:var(--surface);color:var(--ink);font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+.hdr{background:var(--ink);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.35)}
+.hdr-rule{height:3px;background:linear-gradient(90deg,var(--gold),#E8C547,var(--gold))}
+.hdr-body{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-emblem{width:32px;height:32px;border:1.5px solid rgba(184,134,11,.5);border-radius:var(--r4);display:flex;align-items:center;justify-content:center;font-family:var(--ff-head);font-size:.95rem;font-weight:700;color:#E8C547;flex-shrink:0}
+.hdr-title{font-family:var(--ff-head);font-size:.9rem;font-weight:600;color:#F5F4EF}
+.hdr-sub{font-size:.65rem;color:#9CA3AF;font-weight:300;margin-top:1px}
+.hdr-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+
+/* BUTTONS */
+.btn{padding:7px 13px;border-radius:var(--r4);border:1px solid transparent;font-family:var(--ff-body);font-size:.78rem;font-weight:500;cursor:pointer;transition:all var(--tr);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-primary{background:var(--ink2);color:#fff;border-color:var(--ink2)}
+.btn-primary:hover{background:var(--ink)}
+.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn-gold:hover{filter:brightness(.92)}
+.btn-emerald{background:var(--emerald);color:#fff;border-color:var(--emerald)}
+.btn-emerald:hover{filter:brightness(.92)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#D1D5DB;border-color:rgba(255,255,255,.12)}
+.btn-ghost:hover{background:rgba(255,255,255,.15)}
+.btn-danger{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+.btn-danger:hover{filter:brightness(.92)}
+.btn-sm{padding:5px 10px;font-size:.72rem}
+
+/* LAYOUT */
+.layout{max-width:1400px;margin:0 auto;padding:1.5rem;display:grid;grid-template-columns:260px 1fr;gap:1.25rem}
+
+/* SIDEBAR */
+.sidebar{background:var(--card);border:1px solid var(--border);border-radius:var(--r12);padding:1rem;box-shadow:var(--shadow);height:fit-content;position:sticky;top:72px}
+.sidebar-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem}
+.proj-list{display:flex;flex-direction:column;gap:5px}
+.proj-item{border:1px solid var(--border);border-radius:var(--r8);padding:9px 10px;cursor:pointer;transition:all var(--tr)}
+.proj-item:hover{border-color:var(--gold);background:var(--gold-l)}
+.proj-item.active{border-color:var(--gold);background:var(--gold-l)}
+.pi-name{font-weight:600;font-size:.8rem;line-height:1.3}
+.pi-meta{font-size:.65rem;color:var(--muted);margin-top:3px}
+.pi-status{display:inline-block;border-radius:var(--r4);padding:2px 6px;font-size:.65rem;font-weight:600;margin-top:4px}
+.vs-ok{background:var(--emerald-l);color:var(--emerald)}
+.vs-pend{background:var(--amber-l);color:var(--amber)}
+.vs-rej{background:var(--crimson-l);color:var(--crimson)}
+
+/* MAIN PANEL */
+.main-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r12);padding:1.5rem;box-shadow:var(--shadow)}
+
+/* PROJECT HEAD */
+.proj-head{display:grid;grid-template-columns:1.6fr 1fr 1fr 90px;gap:10px;margin-bottom:1.25rem}
+.field label{display:block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:4px}
+.field input,.field select{width:100%;border:1px solid var(--border);border-radius:var(--r4);padding:8px 10px;font-family:var(--ff-body);font-size:.85rem;color:var(--ink);outline:none;background:var(--card);transition:border-color var(--tr)}
+.field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,134,11,.1)}
+
+/* VALIDATION STRIP */
+.val-strip{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r8);padding:.75rem 1rem;margin-bottom:1.25rem;gap:10px}
+.val-strip-left{font-size:.8rem;font-weight:500;display:flex;align-items:center;gap:8px}
+.status-badge{display:inline-block;border-radius:var(--r4);padding:3px 9px;font-size:.72rem;font-weight:600}
+
+/* CANVAS TABLE */
+.canvas-wrap{overflow-x:auto;margin-bottom:1.25rem}
+.ctbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.ctbl th,.ctbl td{border:1px solid #C8C7C0;padding:8px 10px;vertical-align:top}
+.ctbl thead th{background:var(--ink);color:#F5F4EF;font-family:var(--ff-head);font-size:.72rem;font-weight:600;letter-spacing:.03em;text-align:left}
+.ctbl thead th:first-child{width:38px;text-align:center}
+.ctbl thead th:nth-child(2){width:180px}
+.ctbl thead th:nth-child(3){width:35%}
+.ctbl .num{width:38px;text-align:center;background:var(--ink2);color:#E8C547;font-family:var(--ff-mono);font-weight:600;font-size:.85rem}
+.ctbl .bloc-cell{background:#F0EFE8;font-weight:700;font-size:.78rem;color:var(--ink);border-left:3px solid var(--gold)}
+.ctbl .q-cell{font-size:.75rem;color:var(--ink2);line-height:1.55;background:#FAFAF7}
+.ctbl .a-cell{background:#fff}
+.ctbl textarea{width:100%;min-height:88px;border:1px solid var(--border);border-radius:var(--r4);padding:7px 9px;font-family:var(--ff-body);font-size:.78rem;color:var(--ink);resize:vertical;outline:none;transition:border-color var(--tr);background:#fff}
+.ctbl textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,134,11,.08)}
+.ctbl tr:hover .bloc-cell{background:#ECE9DE}
+
+/* VALIDATION PANEL */
+.val-panel{border:1px solid var(--border);border-radius:var(--r8);background:var(--surface);padding:1.25rem;margin-top:1.25rem}
+.val-panel-title{font-family:var(--ff-head);font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.val-form{display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:10px;align-items:end;margin-bottom:1rem}
+.val-log{width:100%;border-collapse:collapse;font-size:.75rem}
+.val-log th,.val-log td{border:1px solid var(--border);padding:7px 9px;vertical-align:top}
+.val-log th{background:var(--ink2);color:#F5F4EF;font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.val-log tr:hover td{background:var(--surface)}
+
+/* PDF SPECIFIC */
+.pdf-title,.pdf-meta{display:none}
+
+/* TOAST */
+.toast{position:fixed;right:1.25rem;bottom:1.25rem;background:var(--ink);color:#F5F4EF;padding:.75rem 1.25rem;border-radius:var(--r8);font-size:.78rem;font-weight:500;border-left:3px solid var(--gold);box-shadow:var(--shadow-lg);display:none;z-index:9999}
+
+/* PRINT / PDF */
+@media print{
+  body{background:#fff;padding:0}
+  .hdr,.sidebar,.hdr-actions,.val-form,.no-print{display:none!important}
+  .layout{display:block;padding:0}
+  .main-panel{box-shadow:none;border:none;padding:0}
+  .pdf-title,.pdf-meta{display:block}
+  .pdf-title{font-family:var(--ff-head);font-size:18px;font-weight:700;margin-bottom:6px}
+  .pdf-meta{font-size:11px;color:var(--muted);margin-bottom:14px}
+  .ctbl textarea{border:none;resize:none;min-height:60px}
+  .ctbl tr{break-inside:avoid}
+  .val-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <h1>Canvas projet — Pilotage des réformes</h1>
-    <div class="subtitle">Modèle conforme au canvas en 13 blocs : questions-guides, contenu du projet, validation des modifications assimilables à un avenant, et export PDF.</div>
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="addProject()">+ Nouveau projet</button>
-      <button class="btn btn-blue" onclick="saveData()">💾 Sauvegarder</button>
-      <button class="btn btn-green" onclick="exportCurrentPdf()">📄 Export PDF du canvas</button>
-      <button class="btn btn-ghost" onclick="exportJson()">Exporter données JSON</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('importJson').click()">Importer JSON</button>
-      <input type="file" id="importJson" accept=".json" style="display:none" onchange="importJson(event)">
+
+<header class="hdr">
+  <div class="hdr-rule"></div>
+  <div class="hdr-body">
+    <div class="hdr-brand">
+      <div class="hdr-emblem">D</div>
+      <div>
+        <div class="hdr-title">Canvas projets — Cabinet Desquesnes</div>
+        <div class="hdr-sub">13 blocs · Questions-guides · Validation & export PDF</div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="addProject()">+ Nouveau projet</button>
+      <button class="btn btn-ghost" onclick="exportJson()">💾 Exporter JSON</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">📂 Importer</button>
+      <button class="btn btn-emerald" onclick="exportPdf()">📄 Export PDF</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJson(event)">
     </div>
   </div>
+</header>
 
-  <div class="layout">
-    <aside class="side">
-      <div class="side-title">Projets</div>
-      <div id="projectList" class="project-list"></div>
-    </aside>
-
-    <main class="main" id="mainPanel"></main>
-  </div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Projets (20)</div>
+    <div class="proj-list" id="proj-list"></div>
+  </aside>
+  <main class="main-panel" id="main-panel">
+    <p style="color:var(--muted);font-size:.875rem">Sélectionnez un projet dans la liste.</p>
+  </main>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+const SEED = [{"name": "AGW – DG commun", "cat": "AGW", "statut": "En cours", "prio": "H", "ech": "Juillet 2026", "fields": {"enjeux": "Sécuriser le cadre commun de gestion des directions générales et articuler les volets communes/CPAS dans le contexte de la réforme institutionnelle wallonne.", "perimetre": "AGW relatif au DG commun (modificatif du CDLD). Hors périmètre : arbitrages politiques non encore stabilisés entre MR et partenaires.", "echeances": "Objectif : juillet 2026. Relecture Bruno Caria → LEGISA (10 j.) → Chancellerie → inscription ordre du jour GW.", "budget": "Budget non identifié à ce stade. Ressources : équipe cabinet + SPW IAS.", "intervenants": "Camille (pilote cabinet), Bruno Caria (relecture), Delphine (volet CPAS), LEGISA, Chancellerie.", "publics": "Communes wallonnes, CPAS, directeurs généraux concernés par la fusion.", "risques": "Tension entre Camille et Delphine sur le périmètre exact des dossiers (communes vs CPAS). Accord politique MR à consolider.", "contraintes": "Synchronisation obligatoire avec le décret Fusion des communes et la fusion CPAS.", "interdependances": "Fusion des communes (synchro obligatoire), Fusion CPAS (Delphine), RGCC, Tutelle.", "pointsAttention": "Accord politique MR en cours. Le DG commun est un prérequis pour plusieurs autres réformes.", "objectifs": "Disposer d'un cadre légal clair pour la gestion des DG communs dans les communes fusionnées.", "suivi": "Point trimestriel SPW IAS. Coordination bi-hebdomadaire Camille/Delphine.", "livrables": "Texte AGW finalisé, avis LEGISA, inscription GW."}}, {"name": "AGW – PST (PL11)", "cat": "AGW", "statut": "En cours", "prio": "H", "ech": "Décembre 2026", "fields": {"enjeux": "Moderniser le cadre réglementaire du Programme Stratégique Transversal (PST) en s'appuyant sur les résultats du pilote technologique.", "perimetre": "AGW modificatif du cadre PST. Conditionné au rapport de clôture du marché PST pilote.", "echeances": "Rapport POC marché PST (juin 2026) → concertations → rédaction AGW → LEGISA → GW décembre 2026.", "budget": "Budget AGW : administratif. Marché PST pilote : < 30.000€.", "intervenants": "Camille (pilote), Martin & Catherine (SPW IAS, opposition interne), fédérations de communes.", "publics": "261 communes wallonnes, intercommunales, CPAS.", "risques": "Opposition interne de Martin et Catherine (administration). Le marché PST doit être finalisé AVANT la modification de l'AGW — risque de blocage en cascade.", "contraintes": "Prérequis bloquant : rapport de clôture du marché PST (juin 2026). Accord fédérations requis.", "interdependances": "Marché public PST (prérequis bloquant), RGCC, PCS/FSCR, Interopérabilité numérique.", "pointsAttention": "Ne pas lancer la rédaction de l'AGW avant les résultats du pilote. Impliquer les fédérations tôt.", "objectifs": "Disposer d'un AGW PST modernisé, interopérable et validé par les acteurs de terrain.", "suivi": "Point de suivi après désignation lauréat marché (mai 2026). Coordination mensuelle.", "livrables": "Rapport POC pilote, texte AGW, avis fédérations, adoption GW."}}, {"name": "Circulaire – TOPIII (PL12)", "cat": "Circulaire", "statut": "À risque", "prio": "H", "ech": "Décembre 2026", "fields": {"enjeux": "Évaluer le dispositif TOPIII et décider de la poursuite ou non d'une convention 2027 (TOPIV) dans un contexte de litige actif avec Digi.", "perimetre": "Circulaire TOPIII. Évaluation tripartite : SPW IAS + AdN. Décision convention/TOPIV en décembre 2026.", "echeances": "Évaluation TOPIII : 15/05. Retour Digi sur litige : 30/05. Décision convention/TOPIV : décembre 2026.", "budget": "45M€ zones blanches + 12M€ cyber/IA. Litige Digi menace les contreparties financières.", "intervenants": "Simon Dethier (mandaté SPW IAS), Agence du Numérique, Digi (opérateur en litige), UVCW.", "publics": "Communes en zones blanches, citoyens sans accès internet haut débit.", "risques": "Litige Digi : non-paiement des contreparties financières. Risque de blocage des budgets 45M€ et 12M€.", "contraintes": "Date d'évaluation 15/05 non négociable. Décision politique en décembre avant clôture budgétaire.", "interdependances": "TOPIII Évaluation (PL12), NIS2, Stratégie numérique, Charte fibre optique.", "pointsAttention": "Préparer une option recours juridique si pas de solution amiable avec Digi avant le 30/05.", "objectifs": "Décision éclairée sur la poursuite TOPIII/TOPIV. Résolution du litige Digi.", "suivi": "Point d'étape 15/05 (réception rapports). Réunion de décision décembre 2026.", "livrables": "3 rapports d'évaluation (15/05), décision de poursuite ou clôture, résolution litige Digi."}}, {"name": "Décret – CRAF (PL19)", "cat": "Décret", "statut": "En cours", "prio": "H", "ech": "1er jan. 2027", "fields": {"enjeux": "Réformer le Comité de Rémunération et d'Avancement des Fonctionnaires pour adapter la gestion RH des pouvoirs locaux.", "perimetre": "Décret CRAF. Volet non fiscal via marché public séparé.", "echeances": "2ème lecture GW + Conseil d'État (avril 2026) → 3ème lecture novembre 2026 → entrée en vigueur 1er janvier 2027.", "budget": "Ressources administratives SPW IAS. Marché public pour volet non fiscal.", "intervenants": "Cabinet Desquesnes, SPW IAS, Conseil d'État, parlement wallon.", "publics": "Fonctionnaires des pouvoirs locaux wallons.", "risques": "Calendrier serré — délais partiellement dépassés sur la 1ère lecture.", "contraintes": "Synchronisation avec la circulaire budgétaire 2027. Délais Conseil d'État non maîtrisables.", "interdependances": "Circulaire budgétaire 2027, PCS/FSCR, PST.", "pointsAttention": "1ère lecture ✅. Avis reçus ✅. Vigilance sur les délais GW de novembre.", "objectifs": "Entrée en vigueur du nouveau cadre CRAF au 1er janvier 2027.", "suivi": "Suivi hebdomadaire cabinet. Point après chaque lecture GW.", "livrables": "Texte décret adopté, publication MB, circulaire d'application."}}, {"name": "Décret – Gouvernance (PL13)", "cat": "Décret", "statut": "À planifier", "prio": "M", "ech": "À définir", "fields": {"enjeux": "À compléter — fiche entièrement vide dans le document source.", "perimetre": "À définir.", "echeances": "À définir.", "budget": "À définir.", "intervenants": "À identifier.", "publics": "À identifier.", "risques": "Dossier sans contenu — risque d'oubli stratégique.", "contraintes": "À identifier.", "interdependances": "À identifier.", "pointsAttention": "⚠️ Ce dossier est entièrement vide. Priorité : organiser une réunion de cadrage.", "objectifs": "À définir.", "suivi": "À définir.", "livrables": "À définir."}}, {"name": "Décret – Fusion intercommunales (PL04)", "cat": "Décret", "statut": "En cours", "prio": "M", "ech": "T3 2026", "fields": {"enjeux": "Rationaliser le paysage intercommunal wallon par province pour réduire la fragmentation institutionnelle.", "perimetre": "Décret de fusion des intercommunales. Propositions de rationalisation par province.", "echeances": "État des lieux ✅. Notes de cadrage ✅. Propositions provinciales : T3 2026.", "budget": "Ressources administratives SPW IAS.", "intervenants": "Cabinet Desquesnes, SPW IAS, gouverneurs de province, fédérations intercommunales.", "publics": "Intercommunales wallonnes, communes actionnaires.", "risques": "Résistance forte des structures intercommunales aux regroupements. Pression des élus locaux.", "contraintes": "Nécessité d'un consensus politique préalable aux propositions.", "interdependances": "Fusion des communes (cohérence territoriale).", "pointsAttention": "Les intercommunales disposent de lobbys puissants. Anticiper la communication.", "objectifs": "Réduire significativement le nombre d'intercommunales par rationalisation provinciale.", "suivi": "Point mensuel par province. Comité de pilotage transversal.", "livrables": "Rapports provinciaux de rationalisation, propositions de fusion, texte décret."}}, {"name": "Décret – Fusion des communes", "cat": "Décret", "statut": "En cours", "prio": "H", "ech": "T3 2026", "fields": {"enjeux": "Créer un cadre légal incitatif pour la fusion volontaire de communes wallonnes, avec bonus financier.", "perimetre": "Décret modificatif du CDLD + NGW. Principe du volontariat maintenu.", "echeances": "Rapport interviews Bastogne-Bertogne (T2 2026) → Décret CDLD + NGW (T3) → LEGISA → Chancellerie → GW.", "budget": "Bonus financier à sécuriser en budget. Montant à définir avec Finance.", "intervenants": "Camille, Delphine (CPAS), Bruno Caria, LEGISA, fédérations, communes pilotes Bastogne-Bertogne.", "publics": "Communes wallonnes volontaires. Citoyens des communes concernées.", "risques": "Tension MR sur les fusions obligatoires. Blocage en cascade si DG commun prend du retard.", "contraintes": "Synchronisation obligatoire avec AGW DG commun. Volontariat non négociable.", "interdependances": "AGW DG commun (synchro obligatoire), Fusion CPAS, RGCC, Participation citoyenne.", "pointsAttention": "Le bonus financier est un levier clé d'adhésion. Ne pas sous-estimer la résistance des bourgmestres.", "objectifs": "Adoption d'un décret offrant un cadre clair et incitatif pour les fusions volontaires.", "suivi": "Suivi terrain Bastogne-Bertogne. Points réguliers avec fédérations.", "livrables": "Rapport interviews terrain, texte décret, bonus financier sécurisé, adoption GW."}}, {"name": "Décret – Interopérabilité numérique", "cat": "Décret", "statut": "Terminé", "prio": "M", "ech": "Mars 2026 (clôturé)", "fields": {"enjeux": "Poser les bases légales de l'interopérabilité numérique entre les systèmes des pouvoirs locaux wallons.", "perimetre": "Phase actuelle clôturée. Suite via GPL et stratégie numérique.", "echeances": "Listing ✅. Réunion concertation ✅. APD produit ✅. Phase clôturée mars 2026.", "budget": "Phase 1 clôturée dans les budgets initiaux.", "intervenants": "Cabinet Desquesnes, SPW Digital, AdN, fédérations.", "publics": "Communes wallonnes, citoyens utilisant les services numériques locaux.", "risques": "Aucun risque immédiat sur cette phase. Risques futurs via stratégie numérique.", "contraintes": "Suite conditionnée aux décisions GPL et stratégie numérique.", "interdependances": "Marché PST, GPL, Stratégie numérique des pouvoirs locaux, SDG.", "pointsAttention": "Phase 1 réussie. Maintenir la dynamique pour la phase 2 via GPL.", "objectifs": "✅ Atteint : cadre d'interopérabilité posé. APD produit.", "suivi": "Clôturé. Suivi via GPL pour la suite.", "livrables": "✅ Listing interopérabilité, compte-rendu concertation, APD."}}, {"name": "Décret – PCS / FSCR (PL23)", "cat": "Décret", "statut": "À risque", "prio": "H", "ech": "T3-T4 2026", "fields": {"enjeux": "Réformer le Plan de Cohésion Sociale et le Fonds Spécial de l'Aide Sociale pour moderniser le financement des politiques sociales locales.", "perimetre": "Décret PCS/FSCR. 204 communes concernées (90,76% de la population). Transition jusqu'au 31/12/2030.", "echeances": "Apurement encours 6,18M€ (T2) → Décret voté T3 → Entrée en vigueur T4 2026.", "budget": "6,18M€ supplémentaires non encore validés. Bloquant pour l'entrée en vigueur.", "intervenants": "Camille, chefs de cabinet (accord requis), parlement wallon, 204 communes.", "publics": "204 communes wallonnes, bénéficiaires des politiques de cohésion sociale.", "risques": "Budget 6,18M€ non validé — entrée en vigueur conditionnée. Accord chefs de cabinet incertain.", "contraintes": "Apurement budgétaire indispensable avant vote au parlement.", "interdependances": "PST, eCompte, RGCC, DG commun, Circulaire budgétaire 2027.", "pointsAttention": "1ère lecture ✅. Ne pas inscrire le décret au parlement avant validation budgétaire.", "objectifs": "Adoption du décret et entrée en vigueur d'un nouveau dispositif IVE/FSCR en T4 2026.", "suivi": "Suivi hebdomadaire sur l'avancement budgétaire. Point cabinet avant chaque étape parlementaire.", "livrables": "Accord budgétaire 6,18M€, décret adopté, circulaire d'application."}}, {"name": "Décret – RGCC (PL22)", "cat": "Décret", "statut": "En cours", "prio": "H", "ech": "T2 2026", "fields": {"enjeux": "Réformer le Règlement Général de la Comptabilité Communale pour moderniser la gestion financière des pouvoirs locaux.", "perimetre": "Décret RGCC. Avis fédérations en cours d'intégration.", "echeances": "1ère lecture GW 15/04 ✅ · 2ème lecture 21/05 · 3ème lecture + circulaire T2-T3.", "budget": "Ressources administratives. Circulaire budgétaire 2027 liée.", "intervenants": "Cabinet Desquesnes, SPW IAS, fédérations de communes, Conseil d'État.", "publics": "Communes wallonnes, directeurs financiers locaux.", "risques": "Délais serrés — pas de GW les 30/04, 7 et 14/05/2026. Intégration avis fédérations en cours.", "contraintes": "Agenda GW contraint en mai. Synchronisation avec circulaire budgétaire 2027.", "interdependances": "PST, DG commun, CRAF, Circulaire budgétaire 2027, Tutelle.", "pointsAttention": "Tableau comparatif ✅. Proposition ✅. Attention à la disponibilité GW en mai.", "objectifs": "Adoption du nouveau RGCC et publication de la circulaire d'application en T2-T3.", "suivi": "Suivi semaine par semaine en mai. Coordination avec agenda GW.", "livrables": "Texte décret, avis CE, circulaire budgétaire 2027, publication MB."}}, {"name": "Décret – Tutelle (PL07)", "cat": "Décret", "statut": "En cours", "prio": "H", "ech": "T4 2026", "fields": {"enjeux": "Simplifier le régime de tutelle des pouvoirs locaux en passant d'un contrôle a priori à un contrôle a posteriori, avec développement d'un service d'audit.", "perimetre": "Décret tutelle. Suppression tutelles spéciales. Développement service audit SPW IAS.", "echeances": "1ère lecture GW (T2) → avis UVCW + Fédération CPAS + APW → 2ème lecture + CE → adoption T4.", "budget": "Développement du service d'audit SPW IAS à budgétiser.", "intervenants": "Cabinet Desquesnes, SPW IAS (audit), UVCW, Fédération des CPAS, APW, Conseil d'État.", "publics": "Communes, CPAS, provinces, intercommunales soumises à la tutelle.", "risques": "Augmentation potentielle des recours après suppression des tutelles spéciales.", "contraintes": "Avis obligatoires des 3 fédérations avant 2ème lecture. Lien fort avec RGCC.", "interdependances": "RGCC, DG commun, PCS, PST, Fusion intercommunales.", "pointsAttention": "Préparer le service d'audit avant l'adoption pour éviter un vide de contrôle.", "objectifs": "Adoption d'un régime de tutelle simplifié et opérationnalisation du service d'audit.", "suivi": "Suivi trimestriel. Point spécifique après réception des avis fédérations.", "livrables": "Texte décret, avis fédérations, avis CE, texte tutelle adopté, service audit opérationnel."}}, {"name": "Marché public – Intercos déchets (PL05)", "cat": "Marché public", "statut": "À planifier", "prio": "M", "ech": "À définir", "fields": {"enjeux": "À compléter — fiche entièrement vide dans le document source.", "perimetre": "À définir.", "echeances": "À définir.", "budget": "À définir.", "intervenants": "À identifier.", "publics": "À identifier.", "risques": "Dossier sans contenu — risque d'oubli.", "contraintes": "À identifier.", "interdependances": "À identifier.", "pointsAttention": "⚠️ Ce dossier est entièrement vide. Priorité : organiser une réunion de cadrage.", "objectifs": "À définir.", "suivi": "À définir.", "livrables": "À définir."}}, {"name": "Marché public – Legal design", "cat": "Marché public", "statut": "En cours", "prio": "M", "ech": "T1 2027", "fields": {"enjeux": "Intégrer le langage clair dans les textes réglementaires des pouvoirs locaux pour améliorer l'accessibilité citoyenne.", "perimetre": "3 étapes : circulaire fusion en langage clair (T4 2026) → marché de services → modification CDLD (T1 2027).", "echeances": "Attribution marché T2 2026 · Circulaire fusion T4 2026 · Décret CDLD T1 2027.", "budget": "Marché de services de faible montant. Budget à préciser.", "intervenants": "Cabinet Desquesnes, prestataire legal design (à désigner), SPW IAS, parlement wallon.", "publics": "Communes wallonnes, rédacteurs juridiques, citoyens.", "risques": "Résistance interne aux changements de pratiques rédactionnelles juridiques.", "contraintes": "ISO 24495-1 et 24495-2 à respecter. Marché de faible montant (< seuil publicité).", "interdependances": "Fusion communes, PST, PCS/FSCR, RGCC, GPL.", "pointsAttention": "L'adhésion des juristes est clé. Prévoir des formations.", "objectifs": "Textes réglementaires locaux en langage clair, CDLD modifié.", "suivi": "Suivi trimestriel avec prestataire. Points d'étape par livrable.", "livrables": "Marché attribué, circulaire fusion en langage clair, décret CDLD modificatif."}}, {"name": "Marché public – PST (PL11)", "cat": "Marché public", "statut": "En cours", "prio": "H", "ech": "Juin 2026", "fields": {"enjeux": "Tester techniquement et organisationnellement un outil PST interopérable avec 3 communes pilotes avant réforme réglementaire.", "perimetre": "Marché public < 30.000€. 3 communes pilotes. API libre accès obligatoire. Rapport de clôture juin 2026.", "echeances": "⚠️ URGENT — Réception offres 4/05 · Désignation lauréat 8-18/05 · Kick-off 18/05 · Lancement 5/06 · Rapport clôture juin 2026.", "budget": "< 30.000€ (seuil marché de faible montant). Déjà alloué.", "intervenants": "Simon Dethier (SPW IAS), Rudy Jansemme, Martin, Catherine (opposition interne), 3 communes pilotes, lauréat à désigner.", "publics": "3 communes pilotes. A terme : 261 communes wallonnes.", "risques": "Opposition interne Rudy/Martin/Catherine (administration). Retard = blocage AGW PST.", "contraintes": "Budget < 30.000€ non négociable. API libre accès obligatoire (interopérabilité).", "interdependances": "AGW PST (prérequis bloquant), Interopérabilité numérique, RGCC, Legal design.", "pointsAttention": "⚠️ Dans 4 jours : réception offres. Contacter Simon Dethier + Rudy Jansemme immédiatement.", "objectifs": "Rapport de clôture POC validant la solution technique avant modification AGW.", "suivi": "COPIL light après kick-off. Points hebdomadaires pendant pilote.", "livrables": "Désignation lauréat, kick-off, rapport de clôture POC juin 2026."}}, {"name": "Règlement UE – SDG", "cat": "Règlement UE", "statut": "À risque", "prio": "H", "ech": "31 déc. 2028", "fields": {"enjeux": "Mettre en conformité les 261 communes wallonnes avec le règlement européen Single Digital Gateway (SDG) sous peine de procédure d'infraction.", "perimetre": "15 démarches administratives à dématérialiser. 261 communes. Mise en demeure EU 2019 active.", "echeances": "Accord GW + budget INI27 → 10 communes pilotes (30/06) → Business Analyst (01/10) → Go Live jan. 2028 → Conformité totale 31/12/2028.", "budget": "407.800€ NON inscrit dans la maquette budgétaire INI27 — bloquant pour tout le calendrier.", "intervenants": "Cabinet Desquesnes, SPW Digital, BOSA (fédéral), MonEspace Administration, UVCW, 261 communes.", "publics": "Citoyens européens souhaitant effectuer des démarches administratives en ligne.", "risques": "Budget 407.800€ non inscrit. Moins de 4/261 communes conformes. Mise en demeure EU 2019 active.", "contraintes": "Règlement EU directement applicable. Accord de coopération MB 12/05/2025. Deadline EU non négociable.", "interdependances": "Interopérabilité numérique, GPL, Legal design, BOSA, MonEspace Administration.", "pointsAttention": "Urgence européenne. Préparer un dossier d'urgence pour inscription budget INI27.", "objectifs": "261 communes conformes SDG au 31/12/2028. Go Live MonEspace Administration jan. 2028.", "suivi": "Reporting trimestriel Commission européenne. Points mensuels SPW Digital.", "livrables": "Budget INI27 inscrit, 10 communes pilotes, Business Analyst, Go Live jan. 2028, conformité totale."}}, {"name": "NIS2 – Cybersécurité communes", "cat": "Autre", "statut": "Bloqué", "prio": "H", "ech": "T3 2026", "fields": {"enjeux": "Accompagner les communes wallonnes dans la mise en conformité NIS2 (directive cybersécurité européenne) via une gouvernance collaborative.", "perimetre": "Coordination avec AdN (Agence du Numérique), TOPIII, stratégie numérique. Modèle Smart Region.", "echeances": "Relance AdN (URGENT) · Courrier co-signé Desquesnes/Jeholet (T2) · Réunions gouvernance T3 2026.", "budget": "Budget cyber : 12M€ identifiés dans TOPIII. Modalités d'affectation à définir.", "intervenants": "Cabinet Desquesnes, Cabinet Jeholet (co-signing), Agence du Numérique (bloquante), intercommunales.", "publics": "Communes wallonnes. Citoyens dont les données sont traitées par les administrations locales.", "risques": "Projet au point mort — Agence du Numérique ne donne pas suite malgré relances.", "contraintes": "Directive NIS2 d'application directe. Sanctions européennes possibles en cas de non-conformité.", "interdependances": "TOPIII circulaire, Stratégie numérique, Interopérabilité numérique.", "pointsAttention": "Le co-signing Jeholet est le levier politique clé. Sans courrier officiel, pas d'avancement possible.", "objectifs": "Gouvernance collaborative NIS2 opérationnelle. Communes accompagnées vers la conformité.", "suivi": "Point dès réception de la réponse AdN. Relance via Jeholet si pas de retour.", "livrables": "Courrier co-signé, réponse AdN, plan de gouvernance, réunions T3 2026."}}, {"name": "Charte fibre optique", "cat": "Autre", "statut": "En cours", "prio": "M", "ech": "T2 2026 (continu)", "fields": {"enjeux": "Garantir des délais d'autorisation raisonnables pour le déploiement de la fibre optique sur le territoire wallon.", "perimetre": "Charte signée entre Région, opérateurs et communes. Respect GIA 2024 (délais autorisation 4 mois max).", "echeances": "Diffusion charte aux communes wallonnes (T2 2026) via UVCW + suivi continu via POWALCO.", "budget": "Mise en œuvre sans coût direct pour la Région.", "intervenants": "Cabinet Desquesnes, UVCW, POWALCO, opérateurs télécoms (dont Digi).", "publics": "Communes wallonnes, opérateurs, citoyens bénéficiaires du déploiement fibre.", "risques": "Litige Digi dans le cadre TOPIII fragilise la confiance envers les opérateurs télécoms dans ce dossier.", "contraintes": "Respect GIA 2024 obligatoire. Délai maximal d'autorisation : 4 mois.", "interdependances": "TOPIII (mêmes opérateurs télécoms), GIA.", "pointsAttention": "Dissocier clairement le litige Digi TOPIII de la charte fibre pour éviter contagion.", "objectifs": "100% des communes informées de la charte. Suivi des délais d'autorisation via POWALCO.", "suivi": "Reporting mensuel POWALCO. Alertes si délais dépassés.", "livrables": "Charte ✅ diffusée, tableau de bord suivi POWALCO, rapport semestriel."}}, {"name": "GPL – Guichet Pouvoirs Locaux", "cat": "Autre", "statut": "À risque", "prio": "H", "ech": "2026–2028", "fields": {"enjeux": "Refondre le Guichet des Pouvoirs Locaux pour remplacer la technologie Jahia obsolète et créer un point d'entrée numérique unique pour les communes.", "perimetre": "3 phases : 2026 (UX + besoins) → 2027 (socle technique) → 2027+ (10 briques fonctionnelles).", "echeances": "Accord Ministre + budget INI27 (T1 2027) · Marché UX Researcher T2 2026 · Collecte besoins 2026 · Socle 2027 · Briques 2027+.", "budget": "720.000€ NON inscrit dans INI27 — lancement conditionné à l'inscription budgétaire.", "intervenants": "Cabinet Desquesnes, SPW IAS, SPW Digital, Ministre (accord requis), prestataire UX.", "publics": "Communes wallonnes, agents communaux, citoyens utilisateurs des services en ligne.", "risques": "Budget 720.000€ non inscrit INI27. Sans inscription, phases 2 et 3 impossibles.", "contraintes": "Technologie Jahia obsolète à remplacer impérativement. Budget INI27 requis.", "interdependances": "Interopérabilité numérique, Legal design, PST, Tutelle, RGCC, SDG, FSCR.", "pointsAttention": "Constituer le dossier d'inscription INI27 en priorité. Marché UX peut démarrer en parallèle.", "objectifs": "GPL entièrement refondé avec 10 briques fonctionnelles opérationnelles.", "suivi": "Points trimestriels avec SPW Digital. Reporting budgétaire mensuel.", "livrables": "Budget INI27 inscrit, marché UX, collecte besoins, socle technique, 10 briques déployées."}}, {"name": "Participation citoyenne", "cat": "Autre", "statut": "En cours", "prio": "M", "ech": "T4 2026", "fields": {"enjeux": "Renforcer la participation citoyenne dans les processus décisionnels locaux, notamment pour les fusions de communes.", "perimetre": "Modification décrétale CDLD + panels citoyens pour les fusions. Citoyens dès 16 ans.", "echeances": "Modification décrétale CDLD (T4 2026) · Panel citoyen fusion communes (T1 2027).", "budget": "Ressources administratives + prestataire animation panels (à budgétiser).", "intervenants": "Cabinet Desquesnes, SPW IAS, prestataire animation, communes concernées par fusions.", "publics": "Citoyens wallons dès 16 ans. Communes en processus de fusion.", "risques": "Civic washing — risque d'instrumentalisation des dispositifs participatifs à des fins politiques.", "contraintes": "Confiance citoyenne faible : 22% partis politiques, 35% Région wallonne (IWEPS).", "interdependances": "Fusion communes, Legal design, GPL, PCS.", "pointsAttention": "Rapport SPW IAS ✅. Éviter le civic washing par une transparence totale sur les suites données.", "objectifs": "Cadre légal panels citoyens adopté. Premier panel citoyen pour fusion communes organisé.", "suivi": "Suivi trimestriel SPW IAS. Évaluation participative des dispositifs.", "livrables": "Modification CDLD, cadre légal panels, premier panel citoyen organisé et évalué."}}, {"name": "TOPIII – Évaluation (PL12)", "cat": "Autre", "statut": "En cours", "prio": "H", "ech": "15 mai 2026", "fields": {"enjeux": "Évaluer le dispositif TOPIII sous 3 angles : bilan intermédiaire, rétrospective TOPI→TOPIII, et recommandations pour la pérennisation.", "perimetre": "3 rapports mandatés à Simon Dethier (SPW IAS). Évaluation des recours, indemnités, bilan global.", "echeances": "⚠️ URGENT — 3 rapports à réceptionner le 15/05/2026. Délai non négociable.", "budget": "Honoraires Simon Dethier (SPW IAS). Redevance voirie identifiée comme piste de pérennisation.", "intervenants": "Simon Dethier (mandaté SPW IAS), UVCW (bloquante — 4 relances sans réponse), AdN, opérateurs.", "publics": "Communes, opérateurs télécoms, citoyens bénéficiaires du haut débit.", "risques": "UVCW : 4 relances sans réponse — blocage relationnel. Risque de rapports incomplets.", "contraintes": "Date du 15/05 non négociable. Litige Digi lié à cette évaluation.", "interdependances": "TOPIII circulaire, NIS2, Tutelle/audit, Stratégie numérique.", "pointsAttention": "Escalade politique UVCW requise. Redevance voirie = piste de pérennisation à approfondir.", "objectifs": "3 rapports complets remis le 15/05. Décision éclairée sur TOPIII/TOPIV en décembre.", "suivi": "Réception rapports 15/05. Réunion d'analyse immédiate post-réception.", "livrables": "Rapport intermédiaire TOPIII, rapport rétrospectif TOPI→TOPIII, note pérennisation."}}];
 const BLOCKS = [
-  {n:1,k:'enjeux',b:'Enjeux & problématique',q:"Sur quelle problématique porte ce projet ? Ce bloc pose le contexte et la raison d’être du projet. Il répond à la question : pourquoi ce projet existe-t-il et quelle valeur apporte-t-il ?"},
-  {n:2,k:'perimetre',b:'Périmètre',q:"Quel est le scope du projet ? Sur quel support travaille-t-on (AGW, décret, circulaire, marché public…) ? Ce bloc délimite ce qui est dans le projet et ce qui ne l’est pas."},
-  {n:3,k:'echeances',b:'Échéances',q:"Quel est le délai de réalisation ? Quels sont les jalons clés ? Ce bloc permet d’identifier les dates critiques et de suivre l’avancement dans le temps."},
-  {n:4,k:'budget',b:'Budget & ressources',q:"Quel est le budget alloué ? Quelles ressources humaines et techniques sont mobilisées ? Ce bloc permet d’évaluer les moyens disponibles et d’anticiper les manques."},
+  {n:1,k:'enjeux',b:'Enjeux & problématique',q:"Sur quelle problématique porte ce projet ? Ce bloc pose le contexte et la raison d'être du projet. Il répond à la question : pourquoi ce projet existe-t-il et quelle valeur apporte-t-il ?"},
+  {n:2,k:'perimetre',b:'Périmètre',q:"Quel est le scope du projet ? Sur quel support travaille-t-on (AGW, décret, circulaire, marché public…) ? Ce bloc délimite ce qui est dans le projet et ce qui ne l'est pas."},
+  {n:3,k:'echeances',b:'Échéances',q:"Quel est le délai de réalisation ? Quels sont les jalons clés ? Ce bloc permet d'identifier les dates critiques et de suivre l'avancement dans le temps."},
+  {n:4,k:'budget',b:'Budget & ressources',q:"Quel est le budget alloué ? Quelles ressources humaines et techniques sont mobilisées ? Ce bloc permet d'évaluer les moyens disponibles et d'anticiper les manques."},
   {n:5,k:'intervenants',b:'Intervenants',q:"Qui sont les acteurs impliqués dans ce projet ? Quels sont leurs rôles respectifs ? Ce bloc complète la matrice RACI en offrant une vue narrative des acteurs."},
   {n:6,k:'publics',b:'Publics cibles',q:"Qui est directement concerné ou impacté par cette réforme ? Ce bloc distingue les acteurs du projet de ceux qui en bénéficient ou en subissent les effets."},
-  {n:7,k:'risques',b:'Risques',q:"Quels sont les risques identifiés (concurrence, budget, résistance au changement…) ? Ce bloc permet d’anticiper les obstacles et de préparer des réponses adaptées."},
+  {n:7,k:'risques',b:'Risques',q:"Quels sont les risques identifiés (politique, budget, résistance au changement…) ? Ce bloc permet d'anticiper les obstacles et de préparer des réponses adaptées."},
   {n:8,k:'contraintes',b:'Contraintes',q:"Quelles sont les contraintes pesant sur le projet (délais politiques, obligations légales, ressources limitées…) ? Ce bloc distingue les risques incertains des contraintes certaines."},
-  {n:9,k:'interdependances',b:'Interdépendances',q:"Ce projet est-il lié à d’autres projets ou dossiers ? Quels sont les prérequis bloquants ? Ce bloc est essentiel pour séquencer correctement les actions et éviter les blocages en cascade."},
-  {n:10,k:'pointsAttention',b:'Points d’attention',q:"Quelles sont les hypothèses de travail sur lesquelles on s’appuie ? Quels points de vigilance faut-il surveiller (plan légal, politique, organisationnel, publics cibles) ? Ce bloc liste les paris que l’on fait au départ et qu’on devra confirmer ou infirmer."},
+  {n:9,k:'interdependances',b:'Interdépendances',q:"Ce projet est-il lié à d'autres projets ou dossiers ? Quels sont les prérequis bloquants ? Ce bloc est essentiel pour séquencer correctement les actions et éviter les blocages en cascade."},
+  {n:10,k:'pointsAttention',b:"Points d'attention",q:"Quelles sont les hypothèses de travail sur lesquelles on s'appuie ? Quels points de vigilance faut-il surveiller (plan légal, politique, organisationnel, publics cibles) ?"},
   {n:11,k:'objectifs',b:'Objectifs de la réforme',q:"Que cherche-t-on à atteindre concrètement ? Quels sont les résultats attendus ? Ce bloc définit le succès du projet de manière mesurable et partagée."},
   {n:12,k:'suivi',b:'Approche & suivi',q:"Comment le projet est-il piloté au quotidien ? Quelle est la cadence des points de suivi, avec qui et à quels outils ? Ce bloc documente la gouvernance opérationnelle du projet."},
-  {n:13,k:'livrables',b:'Livrables & jalons',q:"Quels sont les documents, décisions ou actions concrètes attendus en sortie ? Ce bloc liste les outputs tangibles permettant de vérifier l’avancement et de clôturer les étapes."}
+  {n:13,k:'livrables',b:'Livrables & jalons',q:"Quels sont les documents, décisions ou actions concrètes attendus en sortie ? Ce bloc liste les outputs tangibles permettant de vérifier l'avancement et de clôturer les étapes."}
 ];
-const TEMPLATE = Object.fromEntries(BLOCKS.map(b => [b.k, '']));
-const SEED_PROJECTS = [
-  {name:'AGW – DG commun',pilot:'Camille',statut:'En cours',fields:{enjeux:'Sécuriser le cadre commun de gestion des directions générales et articuler les volets communes/CPAS.',perimetre:'AGW relatif au DG commun. Hors périmètre : arbitrages politiques non stabilisés.',echeances:'Objectif : juillet 2026. Relecture Bruno Caria → LEGISA → Chancellerie → GW.',interdependances:'Fusion communes, fusion CPAS, coordination Delphine.',pointsAttention:'Synchronisation obligatoire avec les dossiers connexes.'}},
-  {name:'Marché public – PST',pilot:'Camille',statut:'En cours',fields:{enjeux:'Tester et accompagner l’évolution du PST avant modification réglementaire.',perimetre:'Marché public d’accompagnement. Trois communes pilotes. API et interopérabilité à intégrer.',echeances:'Réception offres 4/05. Désignation lauréat 8-18/05. Kick-off 18/05.',risques:'Opposition interne et retard qui bloquerait l’AGW PST.',interdependances:'Prérequis bloquant pour AGW PST.'}},
-  {name:'NIS2 – Cybersécurité communes',pilot:'Camille',statut:'Bloqué',fields:{enjeux:'Remettre en mouvement le dossier cybersécurité des communes dans une logique d’accompagnement.',perimetre:'Coordination avec AdN, TOPIII, stratégie numérique et pouvoirs locaux.',echeances:'Relance urgente. Courrier Desquesnes/Jeholet à préparer.',risques:'Projet au point mort. Absence de réponse opérationnelle.',pointsAttention:'Le co-signing Jeholet constitue un levier politique.'}}
-];
-let state = {selected:null,projects:[]};
+const TMPL = Object.fromEntries(BLOCKS.map(b=>[b.k,'']));
+const VSTYLE = {
+  'Validé':'vs-ok','Validé avec réserves':'vs-ok',
+  'À revoir':'vs-pend','Validation requise':'vs-pend',
+  'Refusé':'vs-rej','À compléter':'vs-pend'
+};
+
+let state={selected:null,projects:[]};
+
 function newProject(seed={}){
   return {
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()),
-    name: seed.name || 'Nouveau projet',
-    pilot: seed.pilot || '',
-    statut: seed.statut || 'À compléter',
+    id: (crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random())),
+    name: seed.name||'Nouveau projet',
+    pilot: seed.pilot||'Camille',
+    statut: seed.statut||'À compléter',
     version: 1,
     validationState: 'Validation requise',
-    fields: {...TEMPLATE, ...(seed.fields||{})},
+    fields: {...TMPL,...(seed.fields||{})},
     validations: []
   };
 }
+
 function init(){
-  const saved = localStorage.getItem('canvas-projet-reformes-v3');
-  if(saved){try{state = JSON.parse(saved)}catch(e){console.warn(e)}}
-  if(!state.projects || !state.projects.length){state.projects = SEED_PROJECTS.map(newProject);state.selected = state.projects[0].id;}
-  if(!state.selected && state.projects.length) state.selected = state.projects[0].id;
+  const saved=localStorage.getItem('canvas-desquesnes-v1');
+  if(saved){try{state=JSON.parse(saved)}catch(e){}}
+  if(!state.projects||!state.projects.length){
+    state.projects=SEED.map(s=>newProject(s));
+    state.selected=state.projects[0].id;
+  }
+  if(!state.selected&&state.projects.length)state.selected=state.projects[0].id;
   render();
 }
-function saveData(){localStorage.setItem('canvas-projet-reformes-v3',JSON.stringify(state));toast('Sauvegardé')}
-function current(){return state.projects.find(p=>p.id===state.selected)}
-function selectProject(id){state.selected=id;saveData();render()}
-function addProject(){const p=newProject();state.projects.push(p);state.selected=p.id;saveData();render()}
-function deleteCurrent(){const p=current();if(!p)return;if(confirm('Supprimer ce projet ?')){state.projects=state.projects.filter(x=>x.id!==p.id);state.selected=state.projects[0]?.id||null;saveData();render()}}
-function markAvenant(p){p.validationState='Validation requise';}
-function updateMeta(key,value){const p=current();p[key]=value;markAvenant(p);saveData();renderList();renderValidationState()}
-function updateBlock(key,value){const p=current();p.fields[key]=value;markAvenant(p);saveData();renderList();renderValidationState()}
-function validateCurrent(){
-  const p=current();
-  const who=document.getElementById('validator').value.trim();
-  const decision=document.getElementById('decision').value;
-  const comment=document.getElementById('validationComment').value.trim();
+
+function save(){localStorage.setItem('canvas-desquesnes-v1',JSON.stringify(state));toast('Sauvegardé ✓')}
+function cur(){return state.projects.find(p=>p.id===state.selected)}
+function selP(id){state.selected=id;save();render()}
+function addProject(){const p=newProject();state.projects.push(p);state.selected=p.id;save();render()}
+function delCur(){
+  const p=cur();if(!p)return;
+  if(!confirm('Supprimer ce projet du canvas ?'))return;
+  state.projects=state.projects.filter(x=>x.id!==p.id);
+  state.selected=state.projects[0]?.id||null;
+  save();render();
+}
+function updMeta(k,v){const p=cur();p[k]=v;p.validationState='Validation requise';save();renderList()}
+function updField(k,v){const p=cur();p.fields[k]=v;p.validationState='Validation requise';save();renderList()}
+
+function inscribeValidation(){
+  const p=cur();
+  const who=document.getElementById('v-who').value.trim();
+  const dec=document.getElementById('v-dec').value;
+  const com=document.getElementById('v-com').value.trim();
   if(!who){alert('Indiquez la personne qui valide.');return;}
-  p.version += 1;
-  p.validationState = decision;
-  p.validations.push({date:new Date().toLocaleString('fr-BE'),version:p.version,who,decision,comment});
-  saveData();render();toast('Validation inscrite')
+  p.version+=1;p.validationState=dec;
+  p.validations.push({date:new Date().toLocaleString('fr-BE'),version:p.version,who,dec,com});
+  save();render();
 }
+
 function render(){renderList();renderMain()}
+
 function renderList(){
-  const box=document.getElementById('projectList');
-  box.innerHTML=state.projects.map(p=>`<div class="project-item ${p.id===state.selected?'active':''}" onclick="selectProject('${p.id}')">
-    <div class="project-name">${esc(p.name)}</div>
-    <div class="project-meta">Version ${p.version} · ${esc(p.statut||'—')}</div>
-    <span class="status ${p.validationState==='Validé'?'ok':p.validationState==='Refusé'?'rejected':'pending'}">${esc(p.validationState)}</span>
-  </div>`).join('');
+  document.getElementById('proj-list').innerHTML=state.projects.map(p=>`
+    <div class="proj-item ${p.id===state.selected?'active':''}" onclick="selP('${p.id}')">
+      <div class="pi-name">${esc(p.name)}</div>
+      <div class="pi-meta">Version ${p.version} · ${esc(p.statut||'—')}</div>
+      <span class="pi-status ${VSTYLE[p.validationState]||'vs-pend'}">${esc(p.validationState)}</span>
+    </div>`).join('');
 }
+
 function renderMain(){
-  const p=current();
-  const panel=document.getElementById('mainPanel');
-  if(!p){panel.innerHTML='<p>Aucun projet. Cliquez sur “Nouveau projet”.</p>';return;}
+  const p=cur();const panel=document.getElementById('main-panel');
+  if(!p){panel.innerHTML='<p style="color:var(--muted);padding:2rem">Aucun projet sélectionné.</p>';return;}
+  const vsc=VSTYLE[p.validationState]||'vs-pend';
   panel.innerHTML=`
-    <div class="project-head no-print">
-      <div class="field"><label>Nom du projet</label><input value="${esc(p.name)}" onchange="updateMeta('name',this.value)"></div>
-      <div class="field"><label>Pilote</label><input value="${esc(p.pilot)}" onchange="updateMeta('pilot',this.value)"></div>
-      <div class="field"><label>Statut projet</label><input value="${esc(p.statut)}" onchange="updateMeta('statut',this.value)"></div>
-      <div class="field"><label>Version</label><input value="${p.version}" disabled></div>
+    <div class="no-print">
+      <div class="proj-head">
+        <div class="field"><label>Nom du projet</label><input value="${esc(p.name)}" onchange="updMeta('name',this.value)"></div>
+        <div class="field"><label>Pilote</label><input value="${esc(p.pilot)}" onchange="updMeta('pilot',this.value)"></div>
+        <div class="field"><label>Statut projet</label>
+          <select onchange="updMeta('statut',this.value)">
+            ${['En cours','À risque','Bloqué','Terminé','À planifier'].map(s=>`<option ${s===p.statut?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Version</label><input value="${p.version}" disabled style="background:var(--surface);color:var(--muted)"></div>
+      </div>
+      <div class="val-strip">
+        <div class="val-strip-left">
+          État de validation :&nbsp;<span class="status-badge ${vsc}">${esc(p.validationState)}</span>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="delCur()">Supprimer</button>
+      </div>
     </div>
-    <div class="validation-strip no-print">
-      <div><strong>État de validation : </strong><span id="validationState" class="status ${p.validationState==='Validé'?'ok':p.validationState==='Refusé'?'rejected':'pending'}">${esc(p.validationState)}</span></div>
-      <div><button class="btn btn-red" onclick="deleteCurrent()">Supprimer le projet</button></div>
-    </div>
-    <div class="pdf-area" id="pdfArea">
+
+    <div id="pdf-area">
       <div class="pdf-title">Canvas projet — ${esc(p.name)}</div>
-      <div class="pdf-meta">Pilote : ${esc(p.pilot||'—')} · Statut : ${esc(p.statut||'—')} · Version : ${p.version} · Validation : ${esc(p.validationState)} · Export : ${new Date().toLocaleDateString('fr-BE')}</div>
+      <div class="pdf-meta">Pilote : ${esc(p.pilot||'—')} &nbsp;·&nbsp; Statut : ${esc(p.statut||'—')} &nbsp;·&nbsp; Version : ${p.version} &nbsp;·&nbsp; Validation : ${esc(p.validationState)} &nbsp;·&nbsp; Exporté le ${new Date().toLocaleDateString('fr-BE')}</div>
       <div class="canvas-wrap">
-        <table class="canvas-table">
-          <thead><tr><th>#</th><th>Bloc</th><th>Question guide / Objectif du bloc</th><th>Contenu projet</th></tr></thead>
-          <tbody>${BLOCKS.map(bl=>`<tr>
-            <td class="num">${bl.n}</td>
-            <td class="bloc">${esc(bl.b)}</td>
-            <td class="question">${esc(bl.q)}</td>
-            <td class="answer"><textarea onchange="updateBlock('${bl.k}',this.value)">${esc(p.fields[bl.k]||'')}</textarea></td>
-          </tr>`).join('')}</tbody>
+        <table class="ctbl">
+          <thead><tr>
+            <th>#</th>
+            <th>Bloc</th>
+            <th>Question guide / Objectif du bloc</th>
+            <th>Contenu du projet</th>
+          </tr></thead>
+          <tbody>
+            ${BLOCKS.map(bl=>`<tr>
+              <td class="num">${bl.n}</td>
+              <td class="bloc-cell">${esc(bl.b)}</td>
+              <td class="q-cell">${esc(bl.q)}</td>
+              <td class="a-cell"><textarea onblur="updField('${bl.k}',this.value)">${esc(p.fields[bl.k]||'')}</textarea></td>
+            </tr>`).join('')}
+          </tbody>
         </table>
       </div>
-      <div class="validation-panel">
-        <div class="panel-title">Validation / avenant</div>
-        <div class="no-print validation-form">
-          <div class="field"><label>Validé par</label><input id="validator" placeholder="Nom / fonction"></div>
-          <div class="field"><label>Décision</label><select id="decision"><option>Validé</option><option>Validé avec réserves</option><option>À revoir</option><option>Refusé</option></select></div>
-          <div class="field"><label>Commentaire</label><input id="validationComment" placeholder="Portée de l’avenant / réserve / motif"></div>
-          <button class="btn btn-amber" onclick="validateCurrent()">Inscrire validation</button>
+
+      <div class="val-panel">
+        <div class="val-panel-title">Validation / Avenant</div>
+        <div class="no-print val-form">
+          <div class="field"><label>Validé par</label><input id="v-who" placeholder="Nom / Fonction"></div>
+          <div class="field"><label>Décision</label>
+            <select id="v-dec">
+              <option>Validé</option>
+              <option>Validé avec réserves</option>
+              <option>À revoir</option>
+              <option>Refusé</option>
+            </select>
+          </div>
+          <div class="field"><label>Commentaire / Portée</label><input id="v-com" placeholder="Portée de l'avenant, réserve, motif…"></div>
+          <button class="btn btn-gold" onclick="inscribeValidation()">Inscrire</button>
         </div>
-        <table class="validation-log">
+        <table class="val-log">
           <thead><tr><th>Date</th><th>Version</th><th>Validé par</th><th>Décision</th><th>Commentaire</th></tr></thead>
-          <tbody>${p.validations.length?p.validations.map(v=>`<tr><td>${esc(v.date)}</td><td>${v.version}</td><td>${esc(v.who)}</td><td>${esc(v.decision)}</td><td>${esc(v.comment)}</td></tr>`).join(''):'<tr><td colspan="5">Aucune validation inscrite.</td></tr>'}</tbody>
+          <tbody>
+            ${p.validations.length
+              ? p.validations.map(v=>`<tr><td>${esc(v.date)}</td><td>${v.version}</td><td>${esc(v.who)}</td><td><span class="status-badge ${VSTYLE[v.dec]||'vs-pend'}">${esc(v.dec)}</span></td><td>${esc(v.com)}</td></tr>`).join('')
+              : '<tr><td colspan="5" style="color:var(--muted);font-style:italic">Aucune validation inscrite.</td></tr>'
+            }
+          </tbody>
         </table>
       </div>
     </div>`;
 }
-function renderValidationState(){const p=current();const el=document.getElementById('validationState');if(el){el.textContent=p.validationState;el.className='status pending'}}
-function exportCurrentPdf(){
-  saveData();
-  const p=current();
-  const area=document.getElementById('pdfArea');
-  const opt={margin:8,filename:`canvas-${safeFile(p.name)}-v${p.version}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}};
+
+function exportPdf(){
+  save();
+  const p=cur();if(!p)return;
+  const area=document.getElementById('pdf-area');
+  const opt={
+    margin:8,
+    filename:`canvas-${safe(p.name)}-v${p.version}.pdf`,
+    image:{type:'jpeg',quality:.97},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}
+  };
   html2pdf().set(opt).from(area).save();
+  toast('Export PDF en cours…');
 }
-function exportJson(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='canvas-projets-donnees.json';a.click();URL.revokeObjectURL(a.href)}
-function importJson(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const imported=JSON.parse(ev.target.result);if(!Array.isArray(imported.projects))throw new Error();state=imported;saveData();render();toast('Import réussi')}catch{alert('Fichier invalide')}};r.readAsText(file);e.target.value=''}
+
+function exportJson(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='canvas-cabinet-${new Date().toISOString().slice(0,10)}.json';
+  a.click();URL.revokeObjectURL(a.href);
+  toast('JSON exporté ✓');
+}
+
+function importJson(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(!Array.isArray(d.projects))throw new Error();
+      state=d;save();render();toast('Import réussi ✓');
+    }catch{alert('Fichier invalide.')}
+  };
+  r.readAsText(file);e.target.value='';
+}
+
 function esc(v){return String(v??'').replace(/[&<>"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]))}
-function safeFile(s){return String(s||'projet').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',1800)}
+function safe(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2000)}
+
 init();
 </script>
-</body>
-</html>
+</body></html>
