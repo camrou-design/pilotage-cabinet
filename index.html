@@ -3,192 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Canvas projet — Pilotage des réformes</title>
+<title>Pilotage des réformes — Canvas projet</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-:root{
-  --blue:#2f75b5;
-  --blue-dark:#1f4e79;
-  --light:#d9eaf7;
-  --border:#8d8d8d;
-  --ink:#111;
-  --muted:#555;
-  --bg:#f4f5f7;
-  --white:#fff;
-  --green:#1f7a3f;
-  --green-bg:#e7f6ec;
-  --red:#a61b1b;
-  --red-bg:#fdecec;
-  --amber:#b36b00;
-  --amber-bg:#fff4de;
-}
-*{box-sizing:border-box}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;padding:20px;color:var(--ink)}
-.app{max-width:1280px;margin:0 auto}
-.header{background:#fff;border:1px solid #ddd;border-radius:10px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-h1{font-size:22px;margin:0 0 6px;color:#111}.subtitle{font-size:13px;color:var(--muted);line-height:1.45}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{border:none;border-radius:6px;padding:9px 13px;font-weight:700;cursor:pointer;font-size:13px}.btn-primary{background:#111;color:#fff}.btn-blue{background:var(--blue);color:#fff}.btn-green{background:var(--green);color:#fff}.btn-amber{background:var(--amber);color:#fff}.btn-red{background:var(--red);color:#fff}.btn-ghost{background:#e9e9e9;color:#222}.btn:hover{filter:brightness(.96)}
-.layout{display:grid;grid-template-columns:290px 1fr;gap:16px}.side{background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);height:fit-content;position:sticky;top:16px}.side-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:10px}.project-list{display:flex;flex-direction:column;gap:6px}.project-item{border:1px solid #ddd;background:#fff;border-radius:7px;padding:9px;cursor:pointer}.project-item.active{border-color:var(--blue);background:#eef6ff}.project-name{font-weight:700;font-size:13px}.project-meta{font-size:11px;color:#666;margin-top:3px}.status{display:inline-block;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:700;margin-top:5px}.status.ok{background:var(--green-bg);color:var(--green)}.status.pending{background:var(--amber-bg);color:var(--amber)}.status.rejected{background:var(--red-bg);color:var(--red)}
-.main{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}.project-head{display:grid;grid-template-columns:1.5fr 1fr 160px 110px;gap:10px;margin-bottom:14px}.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#555;font-weight:700;margin-bottom:4px}.field input,.field select,.field textarea{width:100%;border:1px solid #bbb;border-radius:5px;padding:8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;background:#fff}.field textarea{min-height:70px;resize:vertical}.validation-strip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:14px}.validation-strip strong{font-size:13px}.validation-strip span{font-size:12px}.canvas-wrap{overflow:auto}
-.canvas-table{width:100%;border-collapse:collapse;background:#fff;font-size:12px}.canvas-table th,.canvas-table td{border:1px solid var(--border);padding:7px;vertical-align:top}.canvas-table th{background:var(--blue);color:#fff;text-align:left;font-weight:700}.canvas-table .num{width:42px;text-align:center;background:var(--blue);color:#fff;font-weight:700;font-size:14px}.canvas-table .bloc{width:190px;background:var(--light);font-weight:700}.canvas-table .question{line-height:1.35}.canvas-table .answer{width:38%}.canvas-table textarea{width:100%;min-height:92px;border:1px solid #bbb;border-radius:4px;padding:7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;resize:vertical;background:#fff}.canvas-table textarea:focus{outline:2px solid rgba(47,117,181,.25);border-color:var(--blue)}
-.validation-panel{margin-top:16px;border:1px solid #ccc;border-radius:8px;background:#fbfbfb;padding:14px}.panel-title{font-weight:700;margin-bottom:10px}.validation-form{display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:10px;align-items:end}.validation-log{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.validation-log th,.validation-log td{border:1px solid #ccc;padding:6px;vertical-align:top}.validation-log th{background:#333;color:#fff;text-align:left}.pdf-area{background:#fff}.pdf-title{display:none}.pdf-meta{display:none}.toast{position:fixed;right:20px;bottom:20px;background:#111;color:#fff;padding:10px 14px;border-radius:7px;display:none;z-index:9999;font-size:13px}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.side{position:static}.project-head,.validation-form{grid-template-columns:1fr}.canvas-table{font-size:11px}.canvas-table .answer{width:auto}}
-@media print{body{background:#fff;padding:0}.header,.side,.toolbar,.validation-form,.no-print{display:none!important}.layout{display:block}.main{box-shadow:none;border:none;padding:0}.pdf-title,.pdf-meta{display:block}.canvas-table textarea{border:none;resize:none;min-height:70px}.validation-panel{break-inside:avoid}.canvas-table tr{break-inside:avoid}}
+:root{--blue:#2f75b5;--light:#d9eaf7;--border:#9e9e9e;--ink:#111;--muted:#555;--bg:#f5f5f5;--white:#fff;--green:#1f7a3f;--red:#a61b1b;--amber:#b36b00}
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:var(--bg);margin:0;padding:20px;color:var(--ink)}
+.container{max-width:1180px;margin:auto}.topbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}.card{background:#fff;border-radius:8px;padding:18px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+h1{font-size:22px;margin:0 0 8px}.hint{color:var(--muted);font-size:13px;margin-bottom:12px}.btn{padding:9px 13px;border:none;border-radius:6px;cursor:pointer;font-weight:700}.btn-primary{background:#111;color:#fff}.btn-blue{background:var(--blue);color:#fff}.btn-green{background:var(--green);color:#fff}.btn-ghost{background:#eee;color:#222}.btn-red{background:var(--red);color:#fff}.btn-amber{background:var(--amber);color:#fff}
+input,textarea,select{font-family:Arial,sans-serif;border:1px solid #bbb;border-radius:4px;padding:8px;width:100%;background:#fff}textarea{min-height:70px;resize:vertical}.project-head{display:grid;grid-template-columns:1.4fr 180px 150px 120px auto;gap:10px;align-items:end;margin-bottom:12px}.field-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+table.canvas{width:100%;border-collapse:collapse;background:#fff}table.canvas th,table.canvas td{border:1px solid var(--border);padding:7px;vertical-align:top}table.canvas th{background:var(--blue);color:#fff;font-size:13px}.num{width:42px;text-align:center;background:var(--blue);color:#fff;font-weight:700}.bloc{width:180px;background:var(--light);font-weight:700}.question{font-size:12px;color:#111;margin-bottom:6px;line-height:1.35}.content-cell textarea{min-height:82px;border:1px solid #ccc}.validation-box{margin-top:14px;border:1px solid #ccc;border-radius:6px;padding:12px;background:#fbfbfb}.validation-title{font-weight:700;margin-bottom:8px}.validation-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}.log{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}.log th{background:#333;color:#fff}.log td,.log th{border:1px solid #ccc;padding:6px}.status-badge{display:inline-block;padding:3px 7px;border-radius:4px;font-size:12px;font-weight:700}.validated{background:#e7f6ec;color:var(--green)}.pending{background:#fff4de;color:var(--amber)}
+.pdf-page{background:#fff;color:#000;width:100%;padding:16px}.pdf-title{font-size:20px;font-weight:700;margin-bottom:6px}.pdf-meta{font-size:12px;color:#444;margin-bottom:12px}.pdf-only{display:none}
+@media print{body{background:#fff;padding:0}.topbar,.btn,.no-print{display:none!important}.card{box-shadow:none;border:none;margin:0;padding:0}.pdf-only{display:block}.container{max-width:none}textarea,input,select{border:none;padding:0;resize:none}.validation-box{break-inside:avoid}.canvas tr{break-inside:avoid}}
+@media(max-width:900px){.project-head,.validation-grid{grid-template-columns:1fr}.container{padding:0}.bloc{width:auto}}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="header">
-    <h1>Canvas projet — Pilotage des réformes</h1>
-    <div class="subtitle">Modèle conforme au canvas en 13 blocs : questions-guides, contenu du projet, validation des modifications assimilables à un avenant, et export PDF.</div>
-    <div class="toolbar">
-      <button class="btn btn-primary" onclick="addProject()">+ Nouveau projet</button>
+<div class="container">
+  <div class="card no-print">
+    <h1>Pilotage des réformes — Canvas projet</h1>
+    <div class="hint">Chaque projet est structuré selon les 13 blocs du canvas. Toute modification peut être assimilée à un avenant et faire l’objet d’une validation inscrite dans le journal.</div>
+    <div class="topbar">
+      <button class="btn btn-primary" onclick="addProject()">+ Ajouter un projet</button>
       <button class="btn btn-blue" onclick="saveData()">💾 Sauvegarder</button>
-      <button class="btn btn-green" onclick="exportCurrentPdf()">📄 Export PDF du canvas</button>
       <button class="btn btn-ghost" onclick="exportJson()">Exporter données JSON</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('importJson').click()">Importer JSON</button>
-      <input type="file" id="importJson" accept=".json" style="display:none" onchange="importJson(event)">
+      <button class="btn btn-ghost" onclick="document.getElementById('import-json').click()">Importer JSON</button>
+      <button class="btn btn-green" onclick="exportAllPdf()">📄 Export PDF global</button>
     </div>
+    <input type="file" id="import-json" accept=".json" style="display:none" onchange="importJson(event)">
   </div>
 
-  <div class="layout">
-    <aside class="side">
-      <div class="side-title">Projets</div>
-      <div id="projectList" class="project-list"></div>
-    </aside>
-
-    <main class="main" id="mainPanel"></main>
-  </div>
+  <div id="projects"></div>
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
-const BLOCKS = [
-  {n:1,k:'enjeux',b:'Enjeux & problématique',q:"Sur quelle problématique porte ce projet ? Ce bloc pose le contexte et la raison d’être du projet. Il répond à la question : pourquoi ce projet existe-t-il et quelle valeur apporte-t-il ?"},
-  {n:2,k:'perimetre',b:'Périmètre',q:"Quel est le scope du projet ? Sur quel support travaille-t-on (AGW, décret, circulaire, marché public…) ? Ce bloc délimite ce qui est dans le projet et ce qui ne l’est pas."},
-  {n:3,k:'echeances',b:'Échéances',q:"Quel est le délai de réalisation ? Quels sont les jalons clés ? Ce bloc permet d’identifier les dates critiques et de suivre l’avancement dans le temps."},
-  {n:4,k:'budget',b:'Budget & ressources',q:"Quel est le budget alloué ? Quelles ressources humaines et techniques sont mobilisées ? Ce bloc permet d’évaluer les moyens disponibles et d’anticiper les manques."},
-  {n:5,k:'intervenants',b:'Intervenants',q:"Qui sont les acteurs impliqués dans ce projet ? Quels sont leurs rôles respectifs ? Ce bloc complète la matrice RACI en offrant une vue narrative des acteurs."},
-  {n:6,k:'publics',b:'Publics cibles',q:"Qui est directement concerné ou impacté par cette réforme ? Ce bloc distingue les acteurs du projet de ceux qui en bénéficient ou en subissent les effets."},
-  {n:7,k:'risques',b:'Risques',q:"Quels sont les risques identifiés (concurrence, budget, résistance au changement…) ? Ce bloc permet d’anticiper les obstacles et de préparer des réponses adaptées."},
-  {n:8,k:'contraintes',b:'Contraintes',q:"Quelles sont les contraintes pesant sur le projet (délais politiques, obligations légales, ressources limitées…) ? Ce bloc distingue les risques incertains des contraintes certaines."},
-  {n:9,k:'interdependances',b:'Interdépendances',q:"Ce projet est-il lié à d’autres projets ou dossiers ? Quels sont les prérequis bloquants ? Ce bloc est essentiel pour séquencer correctement les actions et éviter les blocages en cascade."},
-  {n:10,k:'pointsAttention',b:'Points d’attention',q:"Quelles sont les hypothèses de travail sur lesquelles on s’appuie ? Quels points de vigilance faut-il surveiller (plan légal, politique, organisationnel, publics cibles) ? Ce bloc liste les paris que l’on fait au départ et qu’on devra confirmer ou infirmer."},
-  {n:11,k:'objectifs',b:'Objectifs de la réforme',q:"Que cherche-t-on à atteindre concrètement ? Quels sont les résultats attendus ? Ce bloc définit le succès du projet de manière mesurable et partagée."},
-  {n:12,k:'suivi',b:'Approche & suivi',q:"Comment le projet est-il piloté au quotidien ? Quelle est la cadence des points de suivi, avec qui et à quels outils ? Ce bloc documente la gouvernance opérationnelle du projet."},
-  {n:13,k:'livrables',b:'Livrables & jalons',q:"Quels sont les documents, décisions ou actions concrètes attendus en sortie ? Ce bloc liste les outputs tangibles permettant de vérifier l’avancement et de clôturer les étapes."}
+const BLOCKS=[
+ {n:1,k:'enjeux',b:'Enjeux & problématique',q:"Sur quelle problématique porte ce projet ? Ce bloc pose le contexte et la raison d’être du projet. Il répond à la question : pourquoi ce projet existe-t-il et quelle valeur apporte-t-il ?"},
+ {n:2,k:'perimetre',b:'Périmètre',q:"Quel est le scope du projet ? Sur quel support travaille-t-on (AGW, décret, circulaire, marché public…) ? Ce bloc délimite ce qui est dans le projet et ce qui ne l’est pas."},
+ {n:3,k:'echeances',b:'Échéances',q:"Quel est le délai de réalisation ? Quels sont les jalons clés ? Ce bloc permet d’identifier les dates critiques et de suivre l’avancement dans le temps."},
+ {n:4,k:'budget',b:'Budget & ressources',q:"Quel est le budget alloué ? Quelles ressources humaines et techniques sont mobilisées ? Ce bloc permet d’évaluer les moyens disponibles et d’anticiper les manques."},
+ {n:5,k:'intervenants',b:'Intervenants',q:"Qui sont les acteurs impliqués dans ce projet ? Quels sont leurs rôles respectifs ? Ce bloc complète la matrice RACI en offrant une vue narrative des acteurs."},
+ {n:6,k:'publics',b:'Publics cibles',q:"Qui est directement concerné ou impacté par cette réforme ? Ce bloc distingue les acteurs du projet de ceux qui en bénéficient ou en subissent les effets."},
+ {n:7,k:'risques',b:'Risques',q:"Quels sont les risques identifiés (concurrence, budget, résistance au changement…) ? Ce bloc permet d’anticiper les obstacles et de préparer des réponses adaptées."},
+ {n:8,k:'contraintes',b:'Contraintes',q:"Quelles sont les contraintes pesant sur le projet (délais politiques, obligations légales, ressources limitées…) ? Ce bloc distingue les risques incertains des contraintes certaines."},
+ {n:9,k:'interdependances',b:'Interdépendances',q:"Ce projet est-il lié à d’autres projets ou dossiers ? Quels sont les prérequis bloquants ? Ce bloc est essentiel pour séquencer correctement les actions et éviter les blocages en cascade."},
+ {n:10,k:'pointsAttention',b:'Points d’attention',q:"Quelles sont les hypothèses de travail sur lesquelles on s’appuie ? Quels points de vigilance faut-il surveiller (plan légal, politique, organisationnel, publics cibles) ? Ce bloc liste les paris que l’on fait au départ et qu’on devra confirmer ou infirmer."},
+ {n:11,k:'objectifs',b:'Objectifs de la réforme',q:"Que cherche-t-on à atteindre concrètement ? Quels sont les résultats attendus ? Ce bloc définit le succès du projet de manière mesurable et partagée."},
+ {n:12,k:'suivi',b:'Approche & suivi',q:"Comment le projet est-il piloté au quotidien ? Quelle est la cadence des points de suivi, avec qui et à quels outils ? Ce bloc documente la gouvernance opérationnelle du projet."},
+ {n:13,k:'livrables',b:'Livrables & jalons',q:"Quels sont les documents, décisions ou actions concrètes attendus en sortie ? Ce bloc liste les outputs tangibles permettant de vérifier l’avancement et de clôturer les étapes."}
 ];
-const TEMPLATE = Object.fromEntries(BLOCKS.map(b => [b.k, '']));
-const SEED_PROJECTS = [
-  {name:'AGW – DG commun',pilot:'Camille',statut:'En cours',fields:{enjeux:'Sécuriser le cadre commun de gestion des directions générales et articuler les volets communes/CPAS.',perimetre:'AGW relatif au DG commun. Hors périmètre : arbitrages politiques non stabilisés.',echeances:'Objectif : juillet 2026. Relecture Bruno Caria → LEGISA → Chancellerie → GW.',interdependances:'Fusion communes, fusion CPAS, coordination Delphine.',pointsAttention:'Synchronisation obligatoire avec les dossiers connexes.'}},
-  {name:'Marché public – PST',pilot:'Camille',statut:'En cours',fields:{enjeux:'Tester et accompagner l’évolution du PST avant modification réglementaire.',perimetre:'Marché public d’accompagnement. Trois communes pilotes. API et interopérabilité à intégrer.',echeances:'Réception offres 4/05. Désignation lauréat 8-18/05. Kick-off 18/05.',risques:'Opposition interne et retard qui bloquerait l’AGW PST.',interdependances:'Prérequis bloquant pour AGW PST.'}},
-  {name:'NIS2 – Cybersécurité communes',pilot:'Camille',statut:'Bloqué',fields:{enjeux:'Remettre en mouvement le dossier cybersécurité des communes dans une logique d’accompagnement.',perimetre:'Coordination avec AdN, TOPIII, stratégie numérique et pouvoirs locaux.',echeances:'Relance urgente. Courrier Desquesnes/Jeholet à préparer.',risques:'Projet au point mort. Absence de réponse opérationnelle.',pointsAttention:'Le co-signing Jeholet constitue un levier politique.'}}
-];
-let state = {selected:null,projects:[]};
-function newProject(seed={}){
-  return {
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()),
-    name: seed.name || 'Nouveau projet',
-    pilot: seed.pilot || '',
-    statut: seed.statut || 'À compléter',
-    version: 1,
-    validationState: 'Validation requise',
-    fields: {...TEMPLATE, ...(seed.fields||{})},
-    validations: []
-  };
-}
-function init(){
-  const saved = localStorage.getItem('canvas-projet-reformes-v3');
-  if(saved){try{state = JSON.parse(saved)}catch(e){console.warn(e)}}
-  if(!state.projects || !state.projects.length){state.projects = SEED_PROJECTS.map(newProject);state.selected = state.projects[0].id;}
-  if(!state.selected && state.projects.length) state.selected = state.projects[0].id;
-  render();
-}
-function saveData(){localStorage.setItem('canvas-projet-reformes-v3',JSON.stringify(state));toast('Sauvegardé')}
-function current(){return state.projects.find(p=>p.id===state.selected)}
-function selectProject(id){state.selected=id;saveData();render()}
-function addProject(){const p=newProject();state.projects.push(p);state.selected=p.id;saveData();render()}
-function deleteCurrent(){const p=current();if(!p)return;if(confirm('Supprimer ce projet ?')){state.projects=state.projects.filter(x=>x.id!==p.id);state.selected=state.projects[0]?.id||null;saveData();render()}}
-function markAvenant(p){p.validationState='Validation requise';}
-function updateMeta(key,value){const p=current();p[key]=value;markAvenant(p);saveData();renderList();renderValidationState()}
-function updateBlock(key,value){const p=current();p.fields[key]=value;markAvenant(p);saveData();renderList();renderValidationState()}
-function validateCurrent(){
-  const p=current();
-  const who=document.getElementById('validator').value.trim();
-  const decision=document.getElementById('decision').value;
-  const comment=document.getElementById('validationComment').value.trim();
-  if(!who){alert('Indiquez la personne qui valide.');return;}
-  p.version += 1;
-  p.validationState = decision;
-  p.validations.push({date:new Date().toLocaleString('fr-BE'),version:p.version,who,decision,comment});
-  saveData();render();toast('Validation inscrite')
-}
-function render(){renderList();renderMain()}
-function renderList(){
-  const box=document.getElementById('projectList');
-  box.innerHTML=state.projects.map(p=>`<div class="project-item ${p.id===state.selected?'active':''}" onclick="selectProject('${p.id}')">
-    <div class="project-name">${esc(p.name)}</div>
-    <div class="project-meta">Version ${p.version} · ${esc(p.statut||'—')}</div>
-    <span class="status ${p.validationState==='Validé'?'ok':p.validationState==='Refusé'?'rejected':'pending'}">${esc(p.validationState)}</span>
-  </div>`).join('');
-}
-function renderMain(){
-  const p=current();
-  const panel=document.getElementById('mainPanel');
-  if(!p){panel.innerHTML='<p>Aucun projet. Cliquez sur “Nouveau projet”.</p>';return;}
-  panel.innerHTML=`
-    <div class="project-head no-print">
-      <div class="field"><label>Nom du projet</label><input value="${esc(p.name)}" onchange="updateMeta('name',this.value)"></div>
-      <div class="field"><label>Pilote</label><input value="${esc(p.pilot)}" onchange="updateMeta('pilot',this.value)"></div>
-      <div class="field"><label>Statut projet</label><input value="${esc(p.statut)}" onchange="updateMeta('statut',this.value)"></div>
-      <div class="field"><label>Version</label><input value="${p.version}" disabled></div>
-    </div>
-    <div class="validation-strip no-print">
-      <div><strong>État de validation : </strong><span id="validationState" class="status ${p.validationState==='Validé'?'ok':p.validationState==='Refusé'?'rejected':'pending'}">${esc(p.validationState)}</span></div>
-      <div><button class="btn btn-red" onclick="deleteCurrent()">Supprimer le projet</button></div>
-    </div>
-    <div class="pdf-area" id="pdfArea">
-      <div class="pdf-title">Canvas projet — ${esc(p.name)}</div>
-      <div class="pdf-meta">Pilote : ${esc(p.pilot||'—')} · Statut : ${esc(p.statut||'—')} · Version : ${p.version} · Validation : ${esc(p.validationState)} · Export : ${new Date().toLocaleDateString('fr-BE')}</div>
-      <div class="canvas-wrap">
-        <table class="canvas-table">
-          <thead><tr><th>#</th><th>Bloc</th><th>Question guide / Objectif du bloc</th><th>Contenu projet</th></tr></thead>
-          <tbody>${BLOCKS.map(bl=>`<tr>
-            <td class="num">${bl.n}</td>
-            <td class="bloc">${esc(bl.b)}</td>
-            <td class="question">${esc(bl.q)}</td>
-            <td class="answer"><textarea onchange="updateBlock('${bl.k}',this.value)">${esc(p.fields[bl.k]||'')}</textarea></td>
-          </tr>`).join('')}</tbody>
-        </table>
-      </div>
-      <div class="validation-panel">
-        <div class="panel-title">Validation / avenant</div>
-        <div class="no-print validation-form">
-          <div class="field"><label>Validé par</label><input id="validator" placeholder="Nom / fonction"></div>
-          <div class="field"><label>Décision</label><select id="decision"><option>Validé</option><option>Validé avec réserves</option><option>À revoir</option><option>Refusé</option></select></div>
-          <div class="field"><label>Commentaire</label><input id="validationComment" placeholder="Portée de l’avenant / réserve / motif"></div>
-          <button class="btn btn-amber" onclick="validateCurrent()">Inscrire validation</button>
-        </div>
-        <table class="validation-log">
-          <thead><tr><th>Date</th><th>Version</th><th>Validé par</th><th>Décision</th><th>Commentaire</th></tr></thead>
-          <tbody>${p.validations.length?p.validations.map(v=>`<tr><td>${esc(v.date)}</td><td>${v.version}</td><td>${esc(v.who)}</td><td>${esc(v.decision)}</td><td>${esc(v.comment)}</td></tr>`).join(''):'<tr><td colspan="5">Aucune validation inscrite.</td></tr>'}</tbody>
-        </table>
-      </div>
-    </div>`;
-}
-function renderValidationState(){const p=current();const el=document.getElementById('validationState');if(el){el.textContent=p.validationState;el.className='status pending'}}
-function exportCurrentPdf(){
-  saveData();
-  const p=current();
-  const area=document.getElementById('pdfArea');
-  const opt={margin:8,filename:`canvas-${safeFile(p.name)}-v${p.version}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}};
-  html2pdf().set(opt).from(area).save();
-}
-function exportJson(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='canvas-projets-donnees.json';a.click();URL.revokeObjectURL(a.href)}
-function importJson(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const imported=JSON.parse(ev.target.result);if(!Array.isArray(imported.projects))throw new Error();state=imported;saveData();render();toast('Import réussi')}catch{alert('Fichier invalide')}};r.readAsText(file);e.target.value=''}
+const TEMPLATE=Object.fromEntries(BLOCKS.map(x=>[x.k,'']));
+let data={projects:[]};
+function defaultProject(){return {id:Date.now(),name:'Nouveau projet',owner:'',status:'À compléter',version:1,validated:false,fields:{...TEMPLATE},validations:[]}}
+function loadData(){try{const saved=localStorage.getItem('canvas-reformes-v2');if(saved)data=JSON.parse(saved)}catch(e){console.warn(e)}if(!data.projects.length)data.projects=[defaultProject()];render()}
+function saveData(){localStorage.setItem('canvas-reformes-v2',JSON.stringify(data));toast('Données sauvegardées')}
+function addProject(){data.projects.push(defaultProject());saveData();render()}
+function deleteProject(id){if(confirm('Supprimer ce projet ?')){data.projects=data.projects.filter(p=>p.id!==id);saveData();render()}}
+function project(id){return data.projects.find(p=>p.id===id)}
+function updateMeta(id,key,value){const p=project(id);p[key]=value;p.validated=false;saveData();renderSoftValidation(id)}
+function updateField(id,key,value){const p=project(id);p.fields[key]=value;p.validated=false;saveData();renderSoftValidation(id)}
+function renderSoftValidation(id){const el=document.getElementById('val-state-'+id);if(el){el.textContent='Validation requise après modification';el.className='status-badge pending'}}
+function addValidation(id){const p=project(id);const who=document.getElementById('validator-'+id).value.trim();const decision=document.getElementById('decision-'+id).value;const comment=document.getElementById('val-comment-'+id).value.trim();if(!who){alert('Indiquez la personne qui valide.');return}p.version=(p.version||1)+1;p.validated=decision==='Validé';p.validations.push({date:new Date().toLocaleString('fr-BE'),who,decision,comment,version:p.version});document.getElementById('val-comment-'+id).value='';saveData();render()}
 function esc(v){return String(v??'').replace(/[&<>"]/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]))}
+function render(){document.getElementById('projects').innerHTML=data.projects.map(p=>projectHtml(p)).join('')}
+function projectHtml(p){return `<section class="card project-card" id="project-${p.id}">
+  <div class="project-head no-print">
+    <div><div class="field-label">Nom du projet</div><input value="${esc(p.name)}" onchange="updateMeta(${p.id},'name',this.value)"></div>
+    <div><div class="field-label">Pilote</div><input value="${esc(p.owner)}" onchange="updateMeta(${p.id},'owner',this.value)"></div>
+    <div><div class="field-label">Statut</div><input value="${esc(p.status)}" onchange="updateMeta(${p.id},'status',this.value)"></div>
+    <div><div class="field-label">Version</div><input value="${esc(p.version||1)}" disabled></div>
+    <div><button class="btn btn-green" onclick="exportOnePdf(${p.id})">PDF</button><button class="btn btn-red" onclick="deleteProject(${p.id})">×</button></div>
+  </div>
+  <div class="pdf-page" id="pdf-${p.id}">
+    <div class="pdf-title">Canvas projet — ${esc(p.name)}</div>
+    <div class="pdf-meta">Pilote : ${esc(p.owner||'—')} · Statut : ${esc(p.status||'—')} · Version : ${esc(p.version||1)} · État : ${p.validated?'Validé':'Validation requise'} · Export : ${new Date().toLocaleDateString('fr-BE')}</div>
+    <table class="canvas">
+      <thead><tr><th style="width:42px">#</th><th style="width:180px">Bloc</th><th>Question guide / Objectif du bloc</th><th>Contenu du projet</th></tr></thead>
+      <tbody>${BLOCKS.map(bl=>`<tr><td class="num">${bl.n}</td><td class="bloc">${bl.b}</td><td><div class="question">${esc(bl.q)}</div></td><td class="content-cell"><textarea onchange="updateField(${p.id},'${bl.k}',this.value)">${esc(p.fields[bl.k]||'')}</textarea></td></tr>`).join('')}</tbody>
+    </table>
+    <div class="validation-box">
+      <div class="validation-title">Validation / avenant</div>
+      <div>État actuel : <span id="val-state-${p.id}" class="status-badge ${p.validated?'validated':'pending'}">${p.validated?'Validé':'Validation requise'}</span></div>
+      <div class="validation-grid no-print" style="margin-top:10px">
+        <div><div class="field-label">Validé par</div><input id="validator-${p.id}" placeholder="Nom / fonction"></div>
+        <div><div class="field-label">Décision</div><select id="decision-${p.id}"><option>Validé</option><option>Validé avec réserves</option><option>Refusé</option><option>À revoir</option></select></div>
+        <div><div class="field-label">Commentaire</div><input id="val-comment-${p.id}" placeholder="Motif / portée de l’avenant"></div>
+      </div>
+      <button class="btn btn-amber no-print" onclick="addValidation(${p.id})">Inscrire la validation</button>
+      <table class="log"><thead><tr><th>Date</th><th>Version</th><th>Validé par</th><th>Décision</th><th>Commentaire</th></tr></thead><tbody>${(p.validations||[]).map(v=>`<tr><td>${esc(v.date)}</td><td>${esc(v.version)}</td><td>${esc(v.who)}</td><td>${esc(v.decision)}</td><td>${esc(v.comment)}</td></tr>`).join('')||'<tr><td colspan="5">Aucune validation inscrite.</td></tr>'}</tbody></table>
+    </div>
+  </div>
+</section>`}
+function exportOnePdf(id){saveData();const p=project(id);const element=document.getElementById('pdf-'+id);html2pdf().set({margin:8,filename:`canvas-${safeFile(p.name)}-v${p.version||1}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}}).from(element).save()}
+function exportAllPdf(){saveData();const wrapper=document.createElement('div');wrapper.style.background='#fff';wrapper.innerHTML=data.projects.map(p=>document.getElementById('pdf-'+p.id).outerHTML+'<div style="page-break-after:always"></div>').join('');html2pdf().set({margin:8,filename:`canvas-projets-${new Date().toISOString().slice(0,10)}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'landscape'}}).from(wrapper).save()}
 function safeFile(s){return String(s||'projet').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',1800)}
-init();
+function exportJson(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='canvas-projets-donnees.json';a.click();URL.revokeObjectURL(a.href)}
+function importJson(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{try{const imported=JSON.parse(ev.target.result);if(!Array.isArray(imported.projects))throw new Error();data=imported;saveData();render();toast('Import réussi')}catch{alert('Fichier invalide')}};reader.readAsText(file);e.target.value=''}
+function toast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;right:20px;bottom:20px;background:#111;color:#fff;padding:10px 14px;border-radius:6px;z-index:9999';document.body.appendChild(t)}t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',1800)}
+loadData();
 </script>
 </body>
 </html>
