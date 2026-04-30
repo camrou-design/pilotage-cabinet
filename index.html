@@ -6,819 +6,1067 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Pilotage des réformes — Cabinet Desquesnes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #0D1B3E;
-  --navy-mid: #1a2f5e;
-  --navy-light: #243a73;
-  --blue: #2563EB;
-  --blue-light: #EFF6FF;
-  --green: #16A34A;
-  --green-light: #F0FDF4;
-  --amber: #D97706;
-  --amber-light: #FFFBEB;
-  --red: #DC2626;
-  --red-light: #FEF2F2;
-  --gray: #64748B;
-  --gray-light: #F8FAFC;
-  --border: #E2E8F0;
-  --text: #0F172A;
-  --text-muted: #64748B;
-  --surface: #FFFFFF;
-  --radius: 8px;
-  --radius-lg: 12px;
+:root{
+  --navy:#0D1B3E;--navy2:#1a2f5e;--blue:#2563EB;--blue-l:#EFF6FF;
+  --green:#16A34A;--green-l:#F0FDF4;--amber:#D97706;--amber-l:#FFFBEB;
+  --red:#DC2626;--red-l:#FEF2F2;--gray:#64748B;--gray-l:#F8FAFC;
+  --border:#E2E8F0;--text:#0F172A;--muted:#64748B;--surface:#fff;
+  --r:8px;--rl:12px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: "DM Sans", sans-serif;
-  background: var(--gray-light);
-  color: var(--text);
-  min-height: 100vh;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:var(--gray-l);color:var(--text);min-height:100vh}
 
 /* HEADER */
-.site-header {
-  background: var(--navy);
-  padding: 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 24px rgba(13,27,62,0.4);
-}
-.header-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px;
-}
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.header-dot {
-  width: 8px; height: 8px;
-  background: #60A5FA;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(96,165,250,0.25);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%,100% { box-shadow: 0 0 0 3px rgba(96,165,250,0.25); }
-  50% { box-shadow: 0 0 0 6px rgba(96,165,250,0.1); }
-}
-.header-title {
-  font-family: "Syne", sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  color: #fff;
-  letter-spacing: 0.02em;
-}
-.header-sub {
-  font-size: 0.7rem;
-  color: #93C5FD;
-  font-weight: 400;
-}
-.header-meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 0.75rem;
-  color: #93C5FD;
-}
-.header-badge {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 0.7rem;
-  color: #fff;
-}
-.header-badge.warning {
-  background: rgba(217,119,6,0.2);
-  border-color: rgba(217,119,6,0.4);
-  color: #FCD34D;
-}
+.hdr{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(13,27,62,.5)}
+.hdr-in{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-dot{width:8px;height:8px;background:#60A5FA;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(96,165,250,.25)}50%{box-shadow:0 0 0 6px rgba(96,165,250,.1)}}
+.hdr-title{font-family:"Syne",sans-serif;font-weight:700;font-size:.95rem;color:#fff}
+.hdr-sub{font-size:.65rem;color:#93C5FD}
+.hdr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn{padding:6px 14px;border-radius:6px;border:none;font-family:"DM Sans",sans-serif;font-size:.78rem;font-weight:500;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
+.btn-edit{background:#F59E0B;color:#fff}
+.btn-edit.active{background:#EF4444}
+.btn-add{background:#16A34A;color:#fff}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1D4ED8}
+.btn-danger{background:var(--red);color:#fff}
+.btn-sm{padding:4px 8px;font-size:.72rem;border-radius:4px}
+.save-ind{font-size:.68rem;color:#93C5FD;white-space:nowrap}
 
 /* LAYOUT */
-.container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+.wrap{max-width:1400px;margin:0 auto;padding:1.5rem}
 
 /* STATS */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-.stat-card {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.stat-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
-.stat-card.total::before { background: var(--navy); }
-.stat-card.oncourse::before { background: var(--blue); }
-.stat-card.atrisque::before { background: var(--amber); }
-.stat-card.bloque::before { background: var(--red); }
-.stat-card.termine::before { background: var(--green); }
-.stat-label {
-  font-size: 0.72rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-.stat-number {
-  font-family: "Syne", sans-serif;
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1;
-}
-.stat-card.total .stat-number { color: var(--navy); }
-.stat-card.oncourse .stat-number { color: var(--blue); }
-.stat-card.atrisque .stat-number { color: var(--amber); }
-.stat-card.bloque .stat-number { color: var(--red); }
-.stat-card.termine .stat-number { color: var(--green); }
-.stat-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+.sc{background:var(--surface);border-radius:var(--rl);padding:1rem 1.25rem;border:1px solid var(--border);position:relative;overflow:hidden;transition:transform .2s}
+.sc:hover{transform:translateY(-2px)}
+.sc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
+.sc.tot::before{background:var(--navy)}.sc.enc::before{background:var(--blue)}
+.sc.ris::before{background:var(--amber)}.sc.blo::before{background:var(--red)}
+.sc.ter::before{background:var(--green)}
+.sc-lbl{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.sc-num{font-family:"Syne",sans-serif;font-size:2.25rem;font-weight:800;line-height:1}
+.sc.tot .sc-num{color:var(--navy)}.sc.enc .sc-num{color:var(--blue)}
+.sc.ris .sc-num{color:var(--amber)}.sc.blo .sc-num{color:var(--red)}
+.sc.ter .sc-num{color:var(--green)}
 
-/* ALERT BANNER */
-.alert-banner {
-  background: linear-gradient(135deg, #7C2D12, #991B1B);
-  border-radius: var(--radius-lg);
-  padding: 1rem 1.5rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  border: 1px solid rgba(220,38,38,0.3);
-}
-.alert-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
-.alert-content { flex: 1; }
-.alert-title { font-family: "Syne", sans-serif; font-weight: 700; color: #FCA5A5; font-size: 0.85rem; margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
-.alert-items { display: flex; flex-wrap: wrap; gap: 8px; }
-.alert-pill {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 3px 12px;
-  font-size: 0.75rem;
-  color: #FECACA;
-  font-weight: 500;
-}
+/* ALERT */
+.alert{background:linear-gradient(135deg,#7C2D12,#991B1B);border-radius:var(--rl);padding:.875rem 1.25rem;margin-bottom:1.25rem;display:flex;gap:10px;border:1px solid rgba(220,38,38,.3)}
+.alert-ttl{font-family:"Syne",sans-serif;font-weight:700;color:#FCA5A5;font-size:.78rem;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.alert-pills{display:flex;flex-wrap:wrap;gap:6px}
+.alert-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:2px 10px;font-size:.72rem;color:#FECACA;font-weight:500}
 
 /* TABS */
-.tabs-wrapper {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-.tabs-nav {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  background: #FAFBFC;
-}
-.tab-btn {
-  padding: 14px 24px;
-  font-family: "DM Sans", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-.tab-btn:hover { color: var(--text); background: rgba(0,0,0,0.02); }
-.tab-btn.active {
-  color: var(--navy);
-  border-bottom-color: var(--navy);
-  background: var(--surface);
-  font-weight: 600;
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+.tabs-wrap{background:var(--surface);border-radius:var(--rl);border:1px solid var(--border);overflow:hidden}
+.tabs-nav{display:flex;border-bottom:1px solid var(--border);background:#FAFBFC}
+.tab-btn{padding:12px 20px;font-family:"DM Sans",sans-serif;font-size:.83rem;font-weight:500;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--navy);background:var(--surface);font-weight:600}
+.tab-c{display:none}.tab-c.active{display:block}
 
 /* FILTERS */
-.filters-bar {
-  display: flex;
-  gap: 8px;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filters-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-right: 4px; }
-.filter-btn {
-  padding: 5px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: none;
-  font-size: 0.78rem;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.filter-btn:hover { border-color: var(--navy); color: var(--navy); }
-.filter-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+.fbar{display:flex;gap:6px;padding:.875rem 1.25rem;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.fbar-lbl{font-size:.72rem;color:var(--muted);font-weight:500}
+.fb{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:none;font-size:.75rem;font-family:"DM Sans",sans-serif;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+.fb:hover{border-color:var(--navy);color:var(--navy)}
+.fb.active{background:var(--navy);border-color:var(--navy);color:#fff}
 
-/* PROJECT TABLE */
-.proj-table { width: 100%; border-collapse: collapse; }
-.proj-table th {
-  padding: 10px 16px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-muted);
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  background: #FAFBFC;
-}
-.proj-row { border-bottom: 1px solid var(--border); transition: background 0.15s; cursor: pointer; }
-.proj-row:hover { background: #F8FAFF; }
-.proj-row td { padding: 12px 16px; vertical-align: middle; }
-.proj-name { font-weight: 600; font-size: 0.875rem; color: var(--text); }
-.proj-cat {
-  font-size: 0.72rem;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
-  white-space: nowrap;
-  background: var(--gray-light);
-  color: var(--gray);
-  border: 1px solid var(--border);
-}
-.status-badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.s-oncourse { background: var(--blue-light); color: #1D4ED8; }
-.s-atrisque { background: var(--amber-light); color: #92400E; }
-.s-bloque   { background: var(--red-light);   color: #991B1B; }
-.s-termine  { background: var(--green-light);  color: #14532D; }
-.s-planifier{ background: #F1F5F9; color: #475569; }
-.prio {
-  font-family: "DM Mono", monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.p-H { background: var(--red-light); color: var(--red); }
-.p-M { background: var(--amber-light); color: var(--amber); }
-.p-L { background: #F1F5F9; color: #64748B; }
-.prog-wrap { display: flex; align-items: center; gap: 8px; }
-.prog-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; min-width: 80px; }
-.prog-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
-.prog-pct { font-size: 0.72rem; font-family: "DM Mono", monospace; color: var(--text-muted); min-width: 30px; }
-.proj-echo { font-size: 0.78rem; color: var(--text-muted); }
-.proj-jalon { font-size: 0.78rem; color: var(--text); max-width: 280px; }
-.risk-text { font-size: 0.75rem; color: var(--amber); font-weight: 500; max-width: 220px; }
-.no-results { padding: 3rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
+/* TABLE */
+.ptbl{width:100%;border-collapse:collapse}
+.ptbl th{padding:8px 14px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);background:#FAFBFC}
+.prow{border-bottom:1px solid var(--border);transition:background .15s}
+.prow:hover{background:#F8FAFF}
+.prow td{padding:10px 14px;vertical-align:top}
+.pname{font-weight:600;font-size:.875rem}
+.pcat{font-size:.68rem;font-weight:500;padding:2px 7px;border-radius:20px;white-space:nowrap;background:var(--gray-l);color:var(--gray);border:1px solid var(--border)}
+.sbadge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:600;white-space:nowrap;cursor:pointer;transition:opacity .15s}
+.sbadge:hover{opacity:.8}
+.s-enc{background:var(--blue-l);color:#1D4ED8}
+.s-ris{background:var(--amber-l);color:#92400E}
+.s-blo{background:var(--red-l);color:#991B1B}
+.s-ter{background:var(--green-l);color:#14532D}
+.s-pla{background:#F1F5F9;color:#475569}
+.prio-dot{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:"DM Mono",monospace;font-size:.7rem;font-weight:500}
+.p-H{background:var(--red-l);color:var(--red)}
+.p-M{background:var(--amber-l);color:var(--amber)}
+.p-L{background:#F1F5F9;color:#64748B}
+.pbar-wrap{display:flex;align-items:center;gap:6px}
+.pbar{flex:1;height:4px;background:var(--border);border-radius:2px;min-width:60px}
+.pbar-fill{height:100%;border-radius:2px}
+.ppct{font-size:.7rem;font-family:"DM Mono",monospace;color:var(--muted);min-width:28px;cursor:pointer}
+.pech{font-size:.75rem;color:var(--muted)}
+.pjalon{font-size:.75rem;color:var(--text);max-width:260px}
+.prisk{font-size:.72rem;color:var(--amber);font-weight:500;max-width:200px}
+.row-actions{display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.prow:hover .row-actions{opacity:1}
+.icon-btn{width:26px;height:26px;border-radius:4px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:background .15s}
+.icon-btn:hover{background:var(--border)}
+.icon-btn.del:hover{background:var(--red-l)}
+
+/* DETAIL / NOTES */
+.detail-row{display:none}
+.detail-row.open{display:table-row}
+.detail-cell{padding:0!important;background:#FAFBFF}
+.detail-inner{padding:12px 14px;border-top:1px solid var(--blue-l)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+.dlbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:600;margin-bottom:3px}
+.dval{font-size:.78rem;color:var(--text);line-height:1.5}
+.notes-area{width:100%;border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;font-family:"DM Sans",sans-serif;font-size:.8rem;resize:vertical;min-height:60px;color:var(--text);background:#fff;outline:none;transition:border-color .15s}
+.notes-area:focus{border-color:var(--blue)}
+.notes-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:4px}
+
+/* STATUS DROPDOWN */
+.sdrop{position:relative;display:inline-block}
+.sdrop-menu{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:300;min-width:140px;display:none}
+.sdrop-menu.open{display:block}
+.sdrop-item{padding:7px 12px;font-size:.78rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .1s}
+.sdrop-item:hover{background:var(--gray-l)}
+
+/* PCT EDIT */
+.pct-edit-wrap{position:relative;display:inline-flex;align-items:center}
+.pct-popup{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:300;display:none;white-space:nowrap}
+.pct-popup.open{display:flex;align-items:center;gap:8px}
+.pct-slider{width:120px;accent-color:var(--blue)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:var(--rl);padding:1.5rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:1.25rem;color:var(--navy)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.form-input,.form-select,.form-textarea{border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;font-family:"DM Sans",sans-serif;font-size:.85rem;color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue)}
+.form-textarea{resize:vertical;min-height:70px}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border)}
 
 /* ROADMAP */
-.roadmap-wrap { padding: 1.5rem; overflow-x: auto; }
-.roadmap-header {
-  display: flex;
-  margin-left: 200px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 6px;
-}
-.rm-month {
-  flex: 1;
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  text-align: center;
-  color: var(--text-muted);
-}
-.rm-month.current { color: var(--navy); font-weight: 700; position: relative; }
-.rm-month.current::after {
-  content: "";
-  position: absolute;
-  bottom: -7px; left: 50%;
-  transform: translateX(-50%);
-  width: 2px; height: 6px;
-  background: var(--red);
-}
-.rm-row { display: flex; align-items: center; margin-bottom: 5px; min-height: 28px; }
-.rm-label {
-  width: 200px;
-  flex-shrink: 0;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  padding-right: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.rm-track { flex: 1; position: relative; height: 22px; }
-.rm-bar {
-  position: absolute;
-  height: 22px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  padding: 0 6px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: #fff;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: opacity 0.2s;
-  cursor: default;
-}
-.rm-bar:hover { opacity: 0.85; }
-.rm-progress { position: absolute; top: 0; left: 0; height: 100%; border-radius: 4px; opacity: 0.35; }
-.rm-today {
-  position: absolute;
-  top: -6px;
-  width: 1px;
-  background: var(--red);
-  opacity: 0.6;
-  z-index: 10;
-}
-.rm-legend { display: flex; gap: 16px; margin-top: 1rem; flex-wrap: wrap; }
-.rm-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); }
-.rm-leg-dot { width: 10px; height: 10px; border-radius: 2px; }
+.rm-wrap{padding:1.5rem;overflow-x:auto}
+.rm-hdr{display:flex;margin-left:200px;margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:5px}
+.rm-m{flex:1;font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;text-align:center;color:var(--muted)}
+.rm-m.cur{color:var(--navy);font-weight:700}
+.rm-row{display:flex;align-items:center;margin-bottom:4px}
+.rm-lbl{width:200px;flex-shrink:0;font-size:.7rem;color:var(--muted);padding-right:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm-track{flex:1;position:relative;height:20px}
+.rm-bar{position:absolute;height:20px;border-radius:3px;overflow:hidden;cursor:default}
+.rm-prog{position:absolute;top:0;left:0;height:100%;opacity:.35}
+.rm-leg{display:flex;gap:14px;margin-top:1rem;flex-wrap:wrap}
+.rm-li{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted)}
+.rm-ld{width:10px;height:10px;border-radius:2px}
 
 /* FLUX */
-.flux-wrap { padding: 1.5rem; }
-.flux-header-row {
-  display: grid;
-  grid-template-columns: 1fr 140px 80px 120px 220px;
-  gap: 12px;
-  padding: 8px 12px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-.flux-row {
-  display: grid;
-  grid-template-columns: 1fr 140px 80px 120px 220px;
-  gap: 12px;
-  padding: 12px;
-  border-radius: var(--radius);
-  margin-bottom: 4px;
-  border: 1px solid transparent;
-  transition: all 0.15s;
-}
-.flux-row:hover { background: #F8FAFF; border-color: var(--border); }
-.flux-title { font-weight: 600; font-size: 0.875rem; }
-.flux-orig { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-.flux-action { font-size: 0.78rem; color: var(--text-muted); }
+.flux-wrap{padding:1.25rem}
+.flux-hdr{display:grid;grid-template-columns:1fr 130px 70px 110px 200px;gap:10px;padding:6px 10px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:3px}
+.flux-row{display:grid;grid-template-columns:1fr 130px 70px 110px 200px;gap:10px;padding:10px;border-radius:var(--r);margin-bottom:3px;border:1px solid transparent;transition:all .15s;align-items:center}
+.flux-row:hover{background:#F8FAFF;border-color:var(--border)}
+.ft{font-weight:600;font-size:.83rem}
+.fo{font-size:.72rem;color:var(--muted);margin-top:1px}
+.fa{font-size:.75rem;color:var(--muted)}
 
-/* FOOTER */
-.site-footer {
-  margin-top: 3rem;
-  padding: 1.5rem 2rem;
-  text-align: center;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border);
-}
-.site-footer strong { color: var(--text); }
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--navy);color:#fff;padding:.75rem 1.25rem;border-radius:var(--r);font-size:.8rem;font-weight:500;z-index:500;transform:translateY(100px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
 
-/* TOOLTIP on hover for project row */
-.detail-panel {
-  display: none;
-  background: var(--navy);
-  color: #fff;
-  padding: 12px 16px;
-  font-size: 0.78rem;
-  line-height: 1.6;
-  border-top: 1px solid var(--navy-light);
-}
-.detail-panel.open { display: block; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.detail-item label { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: #93C5FD; margin-bottom: 2px; font-weight: 600; }
-.detail-item p { color: #E0E7FF; font-size: 0.78rem; line-height: 1.5; }
+/* INLINE EDIT */
+[contenteditable="true"]{outline:none;border-bottom:1.5px dashed var(--blue);padding-bottom:1px;cursor:text;min-width:20px;display:inline-block}
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .stats-grid { grid-template-columns: repeat(3, 1fr); }
-  .proj-table th:nth-child(n+6), .proj-table td:nth-child(n+6) { display: none; }
-}
+.footer{margin-top:2rem;padding:1.25rem 1.5rem;text-align:center;font-size:.7rem;color:var(--muted);border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="header-inner">
-    <div class="header-brand">
-      <div class="header-dot"></div>
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-brand">
+      <div class="hdr-dot"></div>
       <div>
-        <div class="header-title">Cabinet Desquesnes — Pilotage des réformes</div>
-        <div class="header-sub">VP Territoire · Infrastructures · Mobilité · Pouvoirs Locaux</div>
+        <div class="hdr-title">Cabinet Desquesnes — Pilotage des réformes</div>
+        <div class="hdr-sub">VP Territoire · Infrastructures · Mobilité · Pouvoirs Locaux · ⚠ Dates indicatives</div>
       </div>
     </div>
-    <div class="header-meta">
-      <span>Version : Avril 2026</span>
-      <span class="header-badge">Document confidentiel</span>
-      <span class="header-badge warning">⚠ Dates indicatives</span>
+    <div class="hdr-actions">
+      <span class="save-ind" id="save-ind">—</span>
+      <button class="btn btn-ghost" onclick="openReminder()" title="Générer un rappel email">📧 Rappels</button>
+      <button class="btn btn-ghost" onclick="exportData()" title="Télécharger mes données">💾 Exporter</button>
+      <button class="btn btn-ghost" onclick="importData()" title="Restaurer mes données">📂 Importer</button>
+      <button class="btn btn-edit" id="edit-btn" onclick="toggleEdit()">✏️ Modifier</button>
+      <button class="btn btn-add" onclick="openAddModal()" id="add-btn" style="display:none">+ Projet</button>
     </div>
   </div>
 </header>
 
-<main class="container">
+<main class="wrap">
 
-  <div class="stats-grid">
-    <div class="stat-card total">
-      <div class="stat-label">Programme total</div>
-      <div class="stat-number" id="cnt-total">20</div>
-      <div class="stat-desc">projets / réformes</div>
+<div class="stats">
+  <div class="sc tot"><div class="sc-lbl">Programme total</div><div class="sc-num" id="cnt-tot">20</div></div>
+  <div class="sc enc"><div class="sc-lbl">En cours</div><div class="sc-num" id="cnt-enc">—</div></div>
+  <div class="sc ris"><div class="sc-lbl">À risque</div><div class="sc-num" id="cnt-ris">—</div></div>
+  <div class="sc blo"><div class="sc-lbl">Bloqués</div><div class="sc-num" id="cnt-blo">—</div></div>
+  <div class="sc ter"><div class="sc-lbl">Terminés</div><div class="sc-num" id="cnt-ter">—</div></div>
+</div>
+
+<div class="alert" id="alert-banner">
+  <div style="font-size:1.1rem">🚨</div>
+  <div>
+    <div class="alert-ttl">Alertes imminentes</div>
+    <div class="alert-pills" id="alert-pills"></div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="sw('projets',this)">📋 Projets (<span id="proj-count">20</span>)</button>
+    <button class="tab-btn" onclick="sw('roadmap',this)">📅 Roadmap 2026</button>
+    <button class="tab-btn" onclick="sw('flux',this)">📥 Flux entrant</button>
+  </nav>
+
+  <div id="tab-projets" class="tab-c active">
+    <div class="fbar">
+      <span class="fbar-lbl">Filtrer :</span>
+      <button class="fb active" onclick="fp('all',this)">Tous</button>
+      <button class="fb" onclick="fp('bloque',this)">🔴 Bloqués</button>
+      <button class="fb" onclick="fp('atrisque',this)">🟠 À risque</button>
+      <button class="fb" onclick="fp('oncourse',this)">🔵 En cours</button>
+      <button class="fb" onclick="fp('termine',this)">🟢 Terminés</button>
+      <button class="fb" onclick="fp('planifier',this)">⚪ À planifier</button>
     </div>
-    <div class="stat-card oncourse">
-      <div class="stat-label">En cours</div>
-      <div class="stat-number" id="cnt-cours">—</div>
-      <div class="stat-desc">avancement normal</div>
-    </div>
-    <div class="stat-card atrisque">
-      <div class="stat-label">À risque</div>
-      <div class="stat-number" id="cnt-risk">—</div>
-      <div class="stat-desc">vigilance requise</div>
-    </div>
-    <div class="stat-card bloque">
-      <div class="stat-label">Bloqués</div>
-      <div class="stat-number" id="cnt-bloc">—</div>
-      <div class="stat-desc">action externe requise</div>
-    </div>
-    <div class="stat-card termine">
-      <div class="stat-label">Terminés</div>
-      <div class="stat-number" id="cnt-done">—</div>
-      <div class="stat-desc">phase clôturée</div>
+    <table class="ptbl"><thead><tr>
+      <th style="width:30px">#</th>
+      <th>Projet</th>
+      <th>Catégorie</th>
+      <th>Statut</th>
+      <th style="width:36px">Pri.</th>
+      <th>Avancement</th>
+      <th>Échéance</th>
+      <th>Prochain jalon</th>
+      <th>Risque</th>
+      <th style="width:70px"></th>
+    </tr></thead>
+    <tbody id="ptbody"></tbody></table>
+  </div>
+
+  <div id="tab-roadmap" class="tab-c">
+    <div class="rm-wrap">
+      <div id="rm-container"></div>
+      <div class="rm-leg">
+        <div class="rm-li"><div class="rm-ld" style="background:#2563EB"></div>En cours</div>
+        <div class="rm-li"><div class="rm-ld" style="background:#D97706"></div>À risque</div>
+        <div class="rm-li"><div class="rm-ld" style="background:#DC2626"></div>Bloqué</div>
+        <div class="rm-li"><div class="rm-ld" style="background:#16A34A"></div>Terminé</div>
+        <div class="rm-li"><div class="rm-ld" style="background:#94A3B8"></div>À planifier</div>
+        <div class="rm-li"><div style="width:10px;height:2px;background:#DC2626;opacity:.6"></div>Aujourd'hui</div>
+      </div>
     </div>
   </div>
 
-  <div class="alert-banner">
-    <div class="alert-icon">🚨</div>
-    <div class="alert-content">
-      <div class="alert-title">Alertes imminentes — à traiter en priorité</div>
-      <div class="alert-items">
-        <span class="alert-pill">04/05 — Réception offres Marché PST (dans 4 jours)</span>
-        <span class="alert-pill">15/05 — 3 rapports TOPIII Évaluation (UVCW bloqué)</span>
-        <span class="alert-pill">21/05 — 2ème lecture GW RGCC (⚠ pas de GW 30/04, 7 et 14/05)</span>
-        <span class="alert-pill">30/05 — Retour Digi sur litige TOPIII</span>
-        <span class="alert-pill">INI27 — 3 projets bloqués sur budget : GPL + SDG + PCS 6,18M€</span>
-        <span class="alert-pill">NIS2 — Agence du Numérique inactive · courrier Desquesnes/Jeholet requis</span>
-      </div>
+  <div id="tab-flux" class="tab-c">
+    <div class="flux-wrap">
+      <div class="flux-hdr"><div>Sujet</div><div>Origine</div><div>Priorité</div><div>Statut</div><div>Action</div></div>
+      <div id="flux-list"></div>
     </div>
   </div>
-
-  <div class="tabs-wrapper">
-    <nav class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('projets',this)">📋 Projets (20)</button>
-      <button class="tab-btn" onclick="switchTab('roadmap',this)">📅 Roadmap 2026</button>
-      <button class="tab-btn" onclick="switchTab('flux',this)">📥 Flux entrant</button>
-    </nav>
-
-    <!-- TAB PROJETS -->
-    <div id="tab-projets" class="tab-content active">
-      <div class="filters-bar">
-        <span class="filters-label">Filtrer :</span>
-        <button class="filter-btn active" onclick="filterP('all',this)">Tous (20)</button>
-        <button class="filter-btn" onclick="filterP('bloque',this)">🔴 Bloqués</button>
-        <button class="filter-btn" onclick="filterP('atrisque',this)">🟠 À risque</button>
-        <button class="filter-btn" onclick="filterP('oncourse',this)">🔵 En cours</button>
-        <button class="filter-btn" onclick="filterP('termine',this)">🟢 Terminés</button>
-        <button class="filter-btn" onclick="filterP('planifier',this)">⚪ À planifier</button>
-      </div>
-      <table class="proj-table" id="proj-table">
-        <thead>
-          <tr>
-            <th style="width:32px">#</th>
-            <th>Projet</th>
-            <th>Catégorie</th>
-            <th>Statut</th>
-            <th style="width:40px">Pri.</th>
-            <th>Échéance</th>
-            <th>Prochain jalon</th>
-            <th>Risque principal</th>
-          </tr>
-        </thead>
-        <tbody id="proj-tbody"></tbody>
-      </table>
-    </div>
-
-    <!-- TAB ROADMAP -->
-    <div id="tab-roadmap" class="tab-content">
-      <div class="roadmap-wrap">
-        <div id="roadmap-container"></div>
-        <div class="rm-legend" id="rm-legend">
-          <div class="rm-leg-item"><div class="rm-leg-dot" style="background:#2563EB"></div>En cours</div>
-          <div class="rm-leg-item"><div class="rm-leg-dot" style="background:#D97706"></div>À risque</div>
-          <div class="rm-leg-item"><div class="rm-leg-dot" style="background:#DC2626"></div>Bloqué</div>
-          <div class="rm-leg-item"><div class="rm-leg-dot" style="background:#16A34A"></div>Terminé</div>
-          <div class="rm-leg-item"><div class="rm-leg-dot" style="background:#94A3B8"></div>À planifier</div>
-          <div class="rm-leg-item"><div style="width:10px;height:2px;background:#DC2626;opacity:0.6"></div>Aujourd'hui (avril 2026)</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB FLUX -->
-    <div id="tab-flux" class="tab-content">
-      <div class="flux-wrap">
-        <div class="flux-header-row">
-          <div>Sujet / Demande</div>
-          <div>Origine</div>
-          <div>Priorité</div>
-          <div>Statut</div>
-          <div>Action à mener</div>
-        </div>
-        <div id="flux-list"></div>
-      </div>
-    </div>
-  </div>
+</div>
 
 </main>
 
-<footer class="site-footer">
-  <strong>Cabinet de François Desquesnes</strong> · VP et Ministre du Territoire, des Infrastructures, de la Mobilité et des Pouvoirs Locaux · Document confidentiel — usage interne · Mise à jour toutes les 3 semaines avec le SPW IAS
+<!-- ADD/EDIT MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Nouveau projet</div>
+    <input type="hidden" id="modal-id" value="">
+    <div class="form-grid">
+      <div class="form-group full"><label class="form-label">Nom du projet</label><input class="form-input" id="f-name" placeholder="ex. Décret – Réforme XYZ"></div>
+      <div class="form-group"><label class="form-label">Catégorie</label>
+        <select class="form-select" id="f-cat">
+          <option>AGW</option><option>Circulaire</option><option>Décret</option>
+          <option>Marché public</option><option>Règlement UE</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Statut</label>
+        <select class="form-select" id="f-status">
+          <option value="oncourse">En cours</option>
+          <option value="atrisque">À risque</option>
+          <option value="bloque">Bloqué</option>
+          <option value="termine">Terminé</option>
+          <option value="planifier">À planifier</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Priorité</label>
+        <select class="form-select" id="f-prio"><option value="H">H — Haute</option><option value="M" selected>M — Moyenne</option><option value="L">L — Basse</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Avancement (%)</label><input class="form-input" id="f-pct" type="number" min="0" max="100" value="0"></div>
+      <div class="form-group"><label class="form-label">Échéance principale</label><input class="form-input" id="f-ech" placeholder="ex. T3 2026"></div>
+      <div class="form-group full"><label class="form-label">Prochain jalon / livrable</label><input class="form-input" id="f-jalon" placeholder="ex. Rapport d'interviews → ..."></div>
+      <div class="form-group full"><label class="form-label">Interdépendances clés</label><input class="form-input" id="f-inter" placeholder="ex. Fusion communes, PST..."></div>
+      <div class="form-group full"><label class="form-label">Risque principal</label><input class="form-input" id="f-risque" placeholder="ex. Délais serrés..."></div>
+      <div class="form-group full"><label class="form-label">Commentaires / Points d'attention</label><textarea class="form-textarea" id="f-comment" placeholder="Notes complémentaires..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="background:var(--gray-l);color:var(--text)" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveModal()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- REMINDER MODAL -->
+<div class="modal-bg" id="reminder-bg">
+  <div class="modal">
+    <div class="modal-title">📧 Rappels par email</div>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Cliquez sur le bouton pour ouvrir votre client mail avec les alertes pré-rédigées.</p>
+    <div id="reminder-content" style="background:var(--gray-l);border-radius:var(--r);padding:1rem;font-size:.8rem;line-height:1.7;color:var(--text);margin-bottom:1rem;white-space:pre-wrap;font-family:'DM Mono',monospace;border:1px solid var(--border);max-height:300px;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="background:var(--gray-l);color:var(--text)" onclick="closeReminder()">Fermer</button>
+      <button class="btn btn-primary" onclick="sendReminder()">📨 Ouvrir dans ma messagerie</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(event)">
+<div class="toast" id="toast"></div>
+
+<footer class="footer">
+  <strong>Cabinet de François Desquesnes</strong> · Document confidentiel — usage interne · Données sauvegardées dans ce navigateur
 </footer>
 
 <script>
-const PROJECTS = [
-  {id:1, name:"AGW – DG commun", cat:"AGW", status:"oncourse", prio:"H", pct:50, ech:"Juillet 2026",
-   jalon:"Relecture Bruno Caria → LEGISA (10 j.) → Chancellerie → GW",
-   inter:"Fusion communes, Fusion CPAS (Delphine)",
-   risque:"Tension Camille / Delphine sur périmètre dossiers",
-   comment:"Accord politique MR en cours. Synchronisation obligatoire volet communes/CPAS.",
-   rm:[1,7]},
-  {id:2, name:"AGW – PST (PL11)", cat:"AGW", status:"oncourse", prio:"H", pct:30, ech:"Décembre 2026",
-   jalon:"Rapport POC Marché PST (prérequis bloquant) → concertations → rédaction AGW → LEGISA → GW",
-   inter:"Marché PST (prérequis bloquant), RGCC, PCS",
-   risque:"Marché PST doit être finalisé AVANT la modification de l'AGW",
-   comment:"Opposition interne Martin & Catherine (administration). Accord fédérations requis.",
-   rm:[1,12]},
-  {id:3, name:"Circulaire – TOPIII (PL12)", cat:"Circulaire", status:"atrisque", prio:"H", pct:40, ech:"Décembre 2026",
-   jalon:"Éval TOPIII 15/05 · Retour Digi 30/05 · Décision convention/TOPIV déc. 2026",
-   inter:"TOPIII évaluation, Stratégie numérique",
-   risque:"Litige Digi : non-paiement contreparties financières — risque sur budgets",
-   comment:"Budget: 45M€ zones blanches + 12M€ cyber/IA. Évaluation et décision en décembre.",
-   rm:[1,12]},
-  {id:4, name:"Décret – CRAF (PL19)", cat:"Décret", status:"oncourse", prio:"H", pct:65, ech:"1er jan. 2027",
-   jalon:"2ème lecture GW + Conseil d'État (avr.) → 3ème lecture nov. → entrée vigueur jan. 2027",
-   inter:"Circulaire budg. 2027, PCS, PST",
-   risque:"Calendrier serré — délais partiellement dépassés",
-   comment:"1ère lecture ✅ · Avis reçus ✅ · 2ème lecture en cours. Volet non fiscal via marché public.",
-   rm:[1,12]},
-  {id:5, name:"Décret – Gouvernance (PL13)", cat:"Décret", status:"planifier", prio:"M", pct:0, ech:"À définir",
-   jalon:"Tous livrables à définir",
-   inter:"À identifier",
-   risque:"Fiche entièrement vide dans le document source",
-   comment:"⚠️ Dossier à compléter entièrement.",
-   rm:[1,12]},
-  {id:6, name:"Décret – Fusion intercommunales (PL04)", cat:"Décret", status:"oncourse", prio:"M", pct:45, ech:"T3 2026",
-   jalon:"Propositions de rationalisation par province (T3 2026)",
-   inter:"Fusion des communes",
-   risque:"Résistance des structures intercommunales aux regroupements",
-   comment:"État des lieux ✅ · Notes de cadrage ✅ · Phase propositions provinciales à lancer.",
-   rm:[1,9]},
-  {id:7, name:"Décret – Fusion des communes", cat:"Décret", status:"oncourse", prio:"H", pct:35, ech:"T3 2026",
-   jalon:"Rapport interviews Bastogne-Bertogne (T2) → Décret CDLD + NGW (T3) → LEGISA → GW",
-   inter:"AGW DG commun (synchro obligatoire), Fusion CPAS (Delphine)",
-   risque:"Blocage en cascade si DG commun prend du retard",
-   comment:"Volontariat maintenu. Tension MR (fusions obligatoires). Bonus financier à sécuriser.",
-   rm:[1,9]},
-  {id:8, name:"Décret – Interopérabilité numérique", cat:"Décret", status:"termine", prio:"M", pct:100, ech:"Mars 2026 (clôturé)",
-   jalon:"Listing ✅ · Réunion concertation ✅ · APD produit ✅ — Phase actuelle clôturée",
-   inter:"Marché PST, Stratégie numérique",
-   risque:"Aucun risque immédiat — suite via stratégie numérique",
-   comment:"Suite attendue via GPL et stratégie numérique des pouvoirs locaux.",
-   rm:[1,3]},
-  {id:9, name:"Décret – PCS / FSCR (PL23)", cat:"Décret", status:"atrisque", prio:"H", pct:40, ech:"T3-T4 2026",
-   jalon:"Apurement encours 6,18M€ (T2) — accord chefs cabinet · Décret voté T3 · Entrée vigueur T4",
-   inter:"PST, eCompte, RGCC, DG commun",
-   risque:"Budget 6,18M€ supplémentaires non validé — entrée en vigueur conditionnée",
-   comment:"1ère lecture ✅ · 204 communes / 90,76% population. Transition jusqu'au 31/12/2030.",
-   rm:[1,12]},
-  {id:10, name:"Décret – RGCC (PL22)", cat:"Décret", status:"oncourse", prio:"H", pct:55, ech:"T2 2026",
-   jalon:"1ère lecture GW 15/04 · 2ème lecture 21/05 · 3ème lecture + circulaire T2-T3",
-   inter:"PST, DG commun, CRAF, Circulaire budg. 2027",
-   risque:"Délais serrés — pas de GW les 30/04, 7 et 14/05/2026",
-   comment:"Tableau comparatif ✅ · Proposition ✅ · Validation ✅. Avis fédérations en intégration.",
-   rm:[1,9]},
-  {id:11, name:"Décret – Tutelle (PL07)", cat:"Décret", status:"oncourse", prio:"H", pct:30, ech:"T4 2026",
-   jalon:"1ère lecture GW (T2) → avis fédérations → 2ème lecture + CE → adoption T4",
-   inter:"RGCC, DG commun, PCS, PST, Fusion intercommunales",
-   risque:"Augmentation potentielle des recours après suppression tutelles spéciales",
-   comment:"Passage a priori → a posteriori. Service d'audit SPW IAS à développer. Lien fort RGCC.",
-   rm:[1,12]},
-  {id:12, name:"Marché public – Intercos déchets (PL05)", cat:"Marché public", status:"planifier", prio:"M", pct:0, ech:"À définir",
-   jalon:"Tous livrables à définir",
-   inter:"À identifier",
-   risque:"Fiche entièrement vide dans le document source",
-   comment:"⚠️ Dossier à compléter entièrement.",
-   rm:[1,12]},
-  {id:13, name:"Marché public – Legal design", cat:"Marché public", status:"oncourse", prio:"M", pct:20, ech:"T1 2027",
-   jalon:"Étape 1: circulaire fusion en langage clair (T4 2026) · Étape 2: marché services · Étape 3: CDLD (T1 2027)",
-   inter:"Fusion communes, PST, PCS/FSCR, RGCC, GPL",
-   risque:"Résistance interne aux changements de pratiques rédactionnelles juridiques",
-   comment:"Attribution marché T2 2026 · ISO 24495-1 et 24495-2 à respecter.",
-   rm:[4,12]},
-  {id:14, name:"Marché public – PST (PL11)", cat:"Marché public", status:"oncourse", prio:"H", pct:60, ech:"Juin 2026",
-   jalon:"⚠️ URGENT — Réception offres 4/05 · Désignation lauréat 8-18/05 · Kick-off 18/05 · Lancement 5/06",
-   inter:"AGW PST (prérequis bloquant AGW), Interopérabilité, RGCC, Legal design",
-   risque:"Opposition interne Rudy / Martin / Catherine (administration SPW IAS)",
-   comment:"Budget < 30.000€. 3 communes pilotes. API libre accès obligatoire. Rapport de clôture juin 2026.",
-   rm:[1,6]},
-  {id:15, name:"Règlement UE – SDG", cat:"Règlement UE", status:"atrisque", prio:"H", pct:10, ech:"31 déc. 2028",
-   jalon:"Accord GW + budget INI27 → 10 communes pilotes (30/06) → Business Analyst (01/10) → Go Live jan. 2028",
-   inter:"Interopérabilité, GPL, Legal design, BOSA, MonEspace Admin.",
-   risque:"Budget 407.800€ NON inscrit dans maquette — bloquant pour tout le calendrier",
-   comment:"Mise en demeure EU 2019 active. Moins de 4/261 communes conformes. Accord coopération MB 12/05/2025.",
-   rm:[1,12]},
-  {id:16, name:"NIS2 – Cybersécurité communes", cat:"Autre", status:"bloque", prio:"H", pct:15, ech:"T3 2026",
-   jalon:"Relance Agence du Numérique (URGENT) · Courrier co-signé Desquesnes/Jeholet (T2) · Réunions governance T3",
-   inter:"TOPIII circulaire, Stratégie numérique, Interopérabilité",
-   risque:"Projet au point mort — Agence du Numérique ne donne pas suite",
-   comment:"1ère réunion intercommunales ✅. Besoin d'impulsion politique forte. Co-signing Jeholet = levier clé.",
-   rm:[1,9]},
-  {id:17, name:"Charte fibre optique", cat:"Autre", status:"oncourse", prio:"M", pct:50, ech:"T2 2026 (continu)",
-   jalon:"Diffusion charte aux communes wallonnes (T2 2026) via UVCW + suivi via POWALCO",
-   inter:"TOPIII (mêmes opérateurs), GIA",
-   risque:"Litige Digi TOPIII fragilise la confiance envers les opérateurs",
-   comment:"Charte signée ✅. Mise en œuvre continue. Respect GIA 2024 (délais autorisation 4 mois max).",
-   rm:[1,12]},
-  {id:18, name:"GPL – Guichet Pouvoirs Locaux", cat:"Autre", status:"atrisque", prio:"H", pct:5, ech:"2026–2028",
-   jalon:"Accord Ministre + budget INI27 (T1 2027) · Marché UX Researcher T2 2026 · Collecte besoins 2026",
-   inter:"Interopérabilité, Legal design, PST, Tutelle, RGCC, SDG, FSCR",
-   risque:"Budget 720.000€ NON inscrit INI27 — lancement conditionné",
-   comment:"Phase 1: 2026 · Phase 2: 2027 socle · Phase 3: 2027+ 10 briques. Technologie Jahia obsolète.",
-   rm:[4,12]},
-  {id:19, name:"Participation citoyenne", cat:"Autre", status:"oncourse", prio:"M", pct:25, ech:"T4 2026",
-   jalon:"Modification décrétale CDLD (T4 2026) · Panel citoyen fusion communes (T1 2027)",
-   inter:"Fusion communes, Legal design, GPL, PCS",
-   risque:"Civic washing — instrumentalisation possible des dispositifs participatifs",
-   comment:"Rapport SPW IAS ✅. Confiance: 22% partis / 35% Région wallonne (IWEPS). Citoyens dès 16 ans.",
-   rm:[1,12]},
-  {id:20, name:"TOPIII – Évaluation (PL12)", cat:"Autre", status:"oncourse", prio:"H", pct:55, ech:"15 mai 2026",
-   jalon:"3 rapports dus 15/05: intermédiaire TOPIII + rétrospectif TOPI→TOPIII + note pérennisation",
-   inter:"TOPIII circulaire, NIS2, Tutelle/audit, Stratégie numérique",
-   risque:"UVCW : 4 relances sans réponse — blocage relationnel",
-   comment:"Simon Dethier mandaté 3 volets. Litige Digi lié. Redevance voirie = piste pérennisation.",
-   rm:[1,5]},
+const INITIAL = [
+  {
+    "id": 1,
+    "name": "AGW – DG commun",
+    "cat": "AGW",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 50,
+    "ech": "Juillet 2026",
+    "jalon": "Relecture Bruno Caria → LEGISA (10 j.) → Chancellerie → GW",
+    "inter": "Fusion communes, Fusion CPAS (Delphine)",
+    "risque": "Tension Camille / Delphine sur périmètre dossiers",
+    "comment": "Accord politique MR en cours. Synchronisation obligatoire volet communes/CPAS.",
+    "rm": [
+      1,
+      7
+    ]
+  },
+  {
+    "id": 2,
+    "name": "AGW – PST (PL11)",
+    "cat": "AGW",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 30,
+    "ech": "Décembre 2026",
+    "jalon": "Rapport POC Marché PST (prérequis bloquant) → concertations → rédaction AGW → LEGISA → GW",
+    "inter": "Marché PST (prérequis bloquant), RGCC, PCS",
+    "risque": "Marché PST doit être finalisé AVANT la modification de l'AGW",
+    "comment": "Opposition interne Martin & Catherine. Accord fédérations requis.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Circulaire – TOPIII (PL12)",
+    "cat": "Circulaire",
+    "status": "atrisque",
+    "prio": "H",
+    "pct": 40,
+    "ech": "Décembre 2026",
+    "jalon": "Éval TOPIII 15/05 · Retour Digi 30/05 · Décision convention/TOPIV déc. 2026",
+    "inter": "TOPIII évaluation, Stratégie numérique",
+    "risque": "Litige Digi : non-paiement contreparties financières",
+    "comment": "Budget: 45M€ zones blanches + 12M€ cyber/IA.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Décret – CRAF (PL19)",
+    "cat": "Décret",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 65,
+    "ech": "1er jan. 2027",
+    "jalon": "2ème lecture GW + CE (avr.) → 3ème lecture nov. → entrée vigueur jan. 2027",
+    "inter": "Circulaire budg. 2027, PCS, PST",
+    "risque": "Calendrier serré — délais partiellement dépassés",
+    "comment": "1ère lecture ✅ · Avis reçus ✅ · 2ème lecture en cours.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Décret – Gouvernance (PL13)",
+    "cat": "Décret",
+    "status": "planifier",
+    "prio": "M",
+    "pct": 0,
+    "ech": "À définir",
+    "jalon": "Tous livrables à définir",
+    "inter": "À identifier",
+    "risque": "Fiche entièrement vide dans le document source",
+    "comment": "⚠️ Dossier à compléter entièrement.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Décret – Fusion intercommunales (PL04)",
+    "cat": "Décret",
+    "status": "oncourse",
+    "prio": "M",
+    "pct": 45,
+    "ech": "T3 2026",
+    "jalon": "Propositions de rationalisation par province (T3 2026)",
+    "inter": "Fusion des communes",
+    "risque": "Résistance des structures intercommunales aux regroupements",
+    "comment": "État des lieux ✅ · Notes de cadrage ✅ · Phase propositions provinciales à lancer.",
+    "rm": [
+      1,
+      9
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Décret – Fusion des communes",
+    "cat": "Décret",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 35,
+    "ech": "T3 2026",
+    "jalon": "Rapport interviews Bastogne-Bertogne (T2) → Décret CDLD + NGW (T3) → LEGISA → GW",
+    "inter": "AGW DG commun (synchro obligatoire), Fusion CPAS (Delphine)",
+    "risque": "Blocage en cascade si DG commun prend du retard",
+    "comment": "Volontariat maintenu. Tension MR (fusions obligatoires).",
+    "rm": [
+      1,
+      9
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Décret – Interopérabilité numérique",
+    "cat": "Décret",
+    "status": "termine",
+    "prio": "M",
+    "pct": 100,
+    "ech": "Mars 2026 (clôturé)",
+    "jalon": "Listing ✅ · Réunion concertation ✅ · APD produit ✅",
+    "inter": "Marché PST, Stratégie numérique",
+    "risque": "Aucun risque immédiat",
+    "comment": "Suite attendue via GPL et stratégie numérique des pouvoirs locaux.",
+    "rm": [
+      1,
+      3
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Décret – PCS / FSCR (PL23)",
+    "cat": "Décret",
+    "status": "atrisque",
+    "prio": "H",
+    "pct": 40,
+    "ech": "T3-T4 2026",
+    "jalon": "Apurement encours 6,18M€ (T2) — accord chefs cabinet · Décret voté T3 · Entrée vigueur T4",
+    "inter": "PST, eCompte, RGCC, DG commun",
+    "risque": "Budget 6,18M€ supplémentaires non validé",
+    "comment": "1ère lecture ✅ · 204 communes / 90,76% population.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Décret – RGCC (PL22)",
+    "cat": "Décret",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 55,
+    "ech": "T2 2026",
+    "jalon": "1ère lecture GW 15/04 · 2ème lecture 21/05 · 3ème lecture + circulaire T2-T3",
+    "inter": "PST, DG commun, CRAF, Circulaire budg. 2027",
+    "risque": "Délais serrés — pas de GW les 30/04, 7 et 14/05/2026",
+    "comment": "Tableau comparatif ✅ · Proposition ✅ · Validation ✅.",
+    "rm": [
+      1,
+      9
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Décret – Tutelle (PL07)",
+    "cat": "Décret",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 30,
+    "ech": "T4 2026",
+    "jalon": "1ère lecture GW (T2) → avis fédérations → 2ème lecture + CE → adoption T4",
+    "inter": "RGCC, DG commun, PCS, PST",
+    "risque": "Augmentation potentielle des recours après suppression tutelles spéciales",
+    "comment": "Passage a priori → a posteriori. Lien fort RGCC.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Marché public – Intercos déchets (PL05)",
+    "cat": "Marché public",
+    "status": "planifier",
+    "prio": "M",
+    "pct": 0,
+    "ech": "À définir",
+    "jalon": "Tous livrables à définir",
+    "inter": "À identifier",
+    "risque": "Fiche entièrement vide dans le document source",
+    "comment": "⚠️ Dossier à compléter entièrement.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Marché public – Legal design",
+    "cat": "Marché public",
+    "status": "oncourse",
+    "prio": "M",
+    "pct": 20,
+    "ech": "T1 2027",
+    "jalon": "Étape 1: circulaire fusion (T4 2026) · Étape 2: marché services · Étape 3: CDLD (T1 2027)",
+    "inter": "Fusion communes, PST, PCS/FSCR, RGCC, GPL",
+    "risque": "Résistance interne aux changements rédactionnels",
+    "comment": "Attribution marché T2 2026 · ISO 24495-1 et 24495-2 à respecter.",
+    "rm": [
+      4,
+      12
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Marché public – PST (PL11)",
+    "cat": "Marché public",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 60,
+    "ech": "Juin 2026",
+    "jalon": "⚠️ URGENT — Réception offres 4/05 · Désignation lauréat 8-18/05 · Kick-off 18/05",
+    "inter": "AGW PST (prérequis bloquant), Interopérabilité, RGCC",
+    "risque": "Opposition interne Rudy / Martin / Catherine (SPW IAS)",
+    "comment": "Budget < 30.000€. 3 communes pilotes. API libre accès obligatoire.",
+    "rm": [
+      1,
+      6
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Règlement UE – SDG",
+    "cat": "Règlement UE",
+    "status": "atrisque",
+    "prio": "H",
+    "pct": 10,
+    "ech": "31 déc. 2028",
+    "jalon": "Accord GW + budget INI27 → 10 communes pilotes (30/06) → BA (01/10) → Go Live jan. 2028",
+    "inter": "Interopérabilité, GPL, Legal design, BOSA, MonEspace Admin.",
+    "risque": "Budget 407.800€ NON inscrit dans maquette",
+    "comment": "Mise en demeure EU 2019 active. Moins de 4/261 communes conformes.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 16,
+    "name": "NIS2 – Cybersécurité communes",
+    "cat": "Autre",
+    "status": "bloque",
+    "prio": "H",
+    "pct": 15,
+    "ech": "T3 2026",
+    "jalon": "Relance Agence du Numérique (URGENT) · Courrier Desquesnes/Jeholet (T2) · Réunions T3",
+    "inter": "TOPIII circulaire, Stratégie numérique, Interopérabilité",
+    "risque": "Projet au point mort — Agence du Numérique inactive",
+    "comment": "1ère réunion intercommunales ✅. Co-signing Jeholet = levier clé.",
+    "rm": [
+      1,
+      9
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Charte fibre optique",
+    "cat": "Autre",
+    "status": "oncourse",
+    "prio": "M",
+    "pct": 50,
+    "ech": "T2 2026 (continu)",
+    "jalon": "Diffusion charte aux communes wallonnes (T2 2026) via UVCW",
+    "inter": "TOPIII (mêmes opérateurs), GIA",
+    "risque": "Litige Digi TOPIII fragilise la confiance envers les opérateurs",
+    "comment": "Charte signée ✅. Mise en œuvre continue via POWALCO.",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 18,
+    "name": "GPL – Guichet Pouvoirs Locaux",
+    "cat": "Autre",
+    "status": "atrisque",
+    "prio": "H",
+    "pct": 5,
+    "ech": "2026–2028",
+    "jalon": "Accord Ministre + budget INI27 (T1 2027) · Marché UX Researcher T2 2026",
+    "inter": "Interopérabilité, Legal design, PST, Tutelle, RGCC, SDG",
+    "risque": "Budget 720.000€ NON inscrit INI27",
+    "comment": "Phase 1: 2026 · Phase 2: 2027 socle · Phase 3: 2027+ 10 briques.",
+    "rm": [
+      4,
+      12
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Participation citoyenne",
+    "cat": "Autre",
+    "status": "oncourse",
+    "prio": "M",
+    "pct": 25,
+    "ech": "T4 2026",
+    "jalon": "Modification décrétale CDLD (T4 2026) · Panel citoyen fusion communes (T1 2027)",
+    "inter": "Fusion communes, Legal design, GPL, PCS",
+    "risque": "Civic washing — instrumentalisation possible des dispositifs",
+    "comment": "Rapport SPW IAS ✅. Confiance: 22% partis / 35% Région wallonne (IWEPS).",
+    "rm": [
+      1,
+      12
+    ]
+  },
+  {
+    "id": 20,
+    "name": "TOPIII – Évaluation (PL12)",
+    "cat": "Autre",
+    "status": "oncourse",
+    "prio": "H",
+    "pct": 55,
+    "ech": "15 mai 2026",
+    "jalon": "3 rapports dus 15/05: intermédiaire TOPIII + rétrospectif TOPI→TOPIII + note pérennisation",
+    "inter": "TOPIII circulaire, NIS2, Tutelle/audit, Stratégie numérique",
+    "risque": "UVCW : 4 relances sans réponse — blocage relationnel",
+    "comment": "Simon Dethier mandaté 3 volets. Redevance voirie = piste pérennisation.",
+    "rm": [
+      1,
+      5
+    ]
+  }
 ];
 
-const FLUX = [
-  {title:"Réponse appel d\'offres IT", orig:"Direction achats", prio:"H", ech:"02/05/2026", status:"atrisque", action:"Rédiger et envoyer avant le 02/05"},
-  {title:"Point trimestriel CODIR", orig:"DG", prio:"H", ech:"05/05/2026", status:"atrisque", action:"Préparer bilan programme + alertes"},
-  {title:"Révision budget Q2", orig:"Finance", prio:"M", ech:"08/05/2026", status:"oncourse", action:"Vérifier cohérence budgets INI27"},
-  {title:"Recrutement chef projet SI", orig:"RH", prio:"M", ech:"15/05/2026", status:"atrisque", action:"Définir profil + lancer annonce"},
-  {title:"Présentation board projets", orig:"DG", prio:"H", ech:"28/05/2026", status:"planifier", action:"Préparer synthèse programme 1 page"},
-  {title:"Audit fournisseur critique", orig:"Achats", prio:"L", ech:"20/05/2026", status:"planifier", action:"Identifier fournisseurs concernés"},
-  {title:"Relance UVCW (4 tentatives)", orig:"TOPIII + TOPIII éval.", prio:"H", ech:"Urgent", status:"bloque", action:"Escalade politique — impliquer Bruno / Mathieu Perin"},
-  {title:"Relance Agence du Numérique", orig:"NIS2", prio:"H", ech:"Urgent", status:"bloque", action:"Courrier co-signé Desquesnes / Jeholet à préparer"},
-  {title:"Dossier budget INI27", orig:"GPL + SDG + PCS", prio:"H", ech:"T1 2027", status:"atrisque", action:"3 projets bloqués — dossier consolidé à instruire"},
-];
+const SL = {"oncourse":"En cours","atrisque":"À risque","bloque":"Bloqué","termine":"Terminé","planifier":"À planifier"};
+const SC = {"oncourse":"s-enc","atrisque":"s-ris","bloque":"s-blo","termine":"s-ter","planifier":"s-pla"};
+const SCOL = {"oncourse":"#2563EB","atrisque":"#D97706","bloque":"#DC2626","termine":"#16A34A","planifier":"#94A3B8"};
+const MONTHS=["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"];
+const TODAY_M=3.5;
 
-const STATUS_CLASS = {oncourse:"s-oncourse", atrisque:"s-atrisque", bloque:"s-bloque", termine:"s-termine", planifier:"s-planifier"};
-const STATUS_LABEL = {oncourse:"En cours", atrisque:"À risque", bloque:"Bloqué", termine:"Terminé", planifier:"À planifier"};
-const STATUS_COLOR = {oncourse:"#2563EB", atrisque:"#D97706", bloque:"#DC2626", termine:"#16A34A", planifier:"#94A3B8"};
-const MONTHS = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"];
-const TODAY_M = 3.5; // April = index 3, mid-month
+let state = {projects:[...INITIAL.map(p=>{...p})], notes:{}, filter:"all", editMode:false};
+let openDetail = null, openStatusDrop = null, openPctPop = null;
 
-function switchTab(tab, btn) {
-  document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+function loadState(){
+  try{
+    const s=localStorage.getItem("pilotage-v2");
+    if(s){
+      const p=JSON.parse(s);
+      state.projects=p.projects||[...INITIAL.map(x=>{...x})];
+      state.notes=p.notes||{};
+    }
+  }catch(e){}
+  updateSaveInd();
+}
+
+function saveState(){
+  localStorage.setItem("pilotage-v2",JSON.stringify({projects:state.projects,notes:state.notes}));
+  updateSaveInd();
+  showToast("Modifications sauvegardées ✓");
+}
+
+function updateSaveInd(){
+  const s=localStorage.getItem("pilotage-v2");
+  document.getElementById("save-ind").textContent=s?"Sauvegardé localement":"Non sauvegardé";
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2500);
+}
+
+function sw(tab,btn){
+  document.querySelectorAll(".tab-c").forEach(c=>c.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
   document.getElementById("tab-"+tab).classList.add("active");
   btn.classList.add("active");
 }
 
-function filterP(f, btn) {
-  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+function fp(f,btn){
+  document.querySelectorAll(".fb").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  renderProjects(f);
+  state.filter=f;
+  renderProjects();
 }
 
-function renderProjects(f) {
-  const order = {bloque:0, atrisque:1, oncourse:2, termine:3, planifier:4};
-  let data = f==="all" ? PROJECTS : PROJECTS.filter(p=>p.status===f);
-  data = [...data].sort((a,b)=>order[a.status]-order[b.status]);
-  const tbody = document.getElementById("proj-tbody");
-  if(!data.length){
-    tbody.innerHTML = `<tr><td colspan="8"><div class="no-results">Aucun projet dans cette catégorie.</div></td></tr>`;
-    return;
-  }
-  const progColor = s => ({oncourse:"#2563EB",atrisque:"#D97706",bloque:"#DC2626",termine:"#16A34A",planifier:"#CBD5E1"}[s]);
-  tbody.innerHTML = data.map((p,i)=>`
-    <tr class="proj-row" onclick="toggleDetail(${p.id})">
-      <td style="font-family:\'DM Mono\',monospace;font-size:0.75rem;color:#94A3B8">${p.id}</td>
-      <td><div class="proj-name">${p.name}</div></td>
-      <td><span class="proj-cat">${p.cat}</span></td>
-      <td><span class="status-badge ${STATUS_CLASS[p.status]}">${STATUS_LABEL[p.status]}</span></td>
-      <td><span class="prio p-${p.prio}">${p.prio}</span></td>
-      <td class="proj-echo">${p.ech}</td>
-      <td class="proj-jalon">${p.jalon}</td>
-      <td class="risk-text">${p.risque}</td>
-    </tr>
-    <tr id="detail-${p.id}" style="display:none">
-      <td colspan="8" class="detail-panel open">
-        <div class="detail-grid">
-          <div class="detail-item"><label>Interdépendances clés</label><p>${p.inter}</p></div>
-          <div class="detail-item"><label>Points d\'attention</label><p>${p.comment}</p></div>
+function toggleEdit(){
+  state.editMode=!state.editMode;
+  const btn=document.getElementById("edit-btn");
+  const addbtn=document.getElementById("add-btn");
+  btn.textContent=state.editMode?"✅ Terminer":"✏️ Modifier";
+  btn.className="btn "+(state.editMode?"btn-edit active":"btn-edit");
+  addbtn.style.display=state.editMode?"inline-flex":"none";
+  renderProjects();
+  if(state.editMode) showToast("Mode édition activé — cliquez sur statut, %, jalons pour modifier");
+}
+
+function renderProjects(){
+  const ord={bloque:0,atrisque:1,oncourse:2,termine:3,planifier:4};
+  let data=state.filter==="all"?state.projects:state.projects.filter(p=>p.status===state.filter);
+  data=[...data].sort((a,b)=>ord[a.status]-ord[b.status]);
+  
+  const tbody=document.getElementById("ptbody");
+  const em=state.editMode;
+  
+  tbody.innerHTML=data.map(p=>{
+    const pc=SCOL[p.status];
+    const note=state.notes[p.id]||"";
+    return `
+    <tr class="prow" data-id="${p.id}">
+      <td style="font-family:'DM Mono',monospace;font-size:.7rem;color:#94A3B8;width:30px">${p.id}</td>
+      <td>
+        <div class="pname" ${em?`contenteditable="true" onblur="saveField(${p.id},'name',this.textContent)"`:'onclick="toggleDetail('+p.id+')"'}>${p.name}</div>
+        <div style="margin-top:3px"><span class="pcat">${p.cat}</span></div>
+      </td>
+      <td>
+        ${em?`<div class="sdrop" id="sdrop-${p.id}">
+          <span class="sbadge ${SC[p.status]}" onclick="toggleStatusDrop(${p.id},event)">${SL[p.status]}</span>
+          <div class="sdrop-menu" id="sdmenu-${p.id}">
+            ${Object.entries(SL).map(([k,v])=>`<div class="sdrop-item" onclick="changeStatus(${p.id},'${k}')">${v}</div>`).join("")}
+          </div>
+        </div>`
+        :`<span class="sbadge ${SC[p.status]}" onclick="toggleDetail(${p.id})">${SL[p.status]}</span>`}
+      </td>
+      <td><span class="prio-dot p-${p.prio}">${p.prio}</span></td>
+      <td>
+        <div class="pbar-wrap">
+          <div class="pbar"><div class="pbar-fill" style="width:${p.pct}%;background:${pc}"></div></div>
+          <div class="pct-edit-wrap" id="pct-wrap-${p.id}">
+            <span class="ppct" ${em?`onclick="togglePctPop(${p.id},event)"`:''}>
+              ${p.pct}%
+            </span>
+            ${em?`<div class="pct-popup" id="pct-pop-${p.id}">
+              <input type="range" class="pct-slider" min="0" max="100" step="5" value="${p.pct}"
+                oninput="updatePct(${p.id},this.value)" id="pct-sl-${p.id}">
+              <span id="pct-val-${p.id}">${p.pct}%</span>
+            </div>`:''}
+          </div>
+        </div>
+      </td>
+      <td class="pech" ${em?`contenteditable="true" onblur="saveField(${p.id},'ech',this.textContent)"`:''}>${p.ech}</td>
+      <td class="pjalon" ${em?`contenteditable="true" onblur="saveField(${p.id},'jalon',this.textContent)"`:''}>${p.jalon}</td>
+      <td class="prisk" ${em?`contenteditable="true" onblur="saveField(${p.id},'risque',this.textContent)"`:''}>${p.risque}</td>
+      <td>
+        <div class="row-actions">
+          <button class="icon-btn" onclick="toggleDetail(${p.id})" title="Notes / Détails">📝</button>
+          ${em?`<button class="icon-btn del" onclick="deleteProject(${p.id})" title="Supprimer">🗑</button>`:''}
         </div>
       </td>
     </tr>
-  `).join("");
+    <tr id="dr-${p.id}" class="detail-row">
+      <td colspan="10" class="detail-cell">
+        <div class="detail-inner">
+          <div class="detail-grid">
+            <div><div class="dlbl">Interdépendances</div><div class="dval" ${em?`contenteditable="true" onblur="saveField(${p.id},'inter',this.textContent)"`:''}>${p.inter}</div></div>
+            <div><div class="dlbl">Points d'attention</div><div class="dval" ${em?`contenteditable="true" onblur="saveField(${p.id},'comment',this.textContent)"`:''}>${p.comment}</div></div>
+          </div>
+          <div class="notes-lbl">📝 Notes personnelles</div>
+          <textarea class="notes-area" placeholder="Tes notes sur ce projet..." 
+            onblur="saveNote(${p.id},this.value)">${note}</textarea>
+        </div>
+      </td>
+    </tr>`;
+  }).join("");
+  
+  updateCounts();
+  document.getElementById("proj-count").textContent=state.projects.length;
 }
 
-function toggleDetail(id) {
-  const row = document.getElementById("detail-"+id);
-  row.style.display = row.style.display==="none" ? "table-row" : "none";
+function toggleDetail(id){
+  const row=document.getElementById("dr-"+id);
+  const isOpen=row.classList.contains("open");
+  if(openDetail&&openDetail!==id){
+    const prev=document.getElementById("dr-"+openDetail);
+    if(prev)prev.classList.remove("open");
+  }
+  row.classList.toggle("open",!isOpen);
+  openDetail=isOpen?null:id;
 }
 
-function renderRoadmap() {
-  const W = 100;
-  const hdr = MONTHS.map((m,i)=>`<div class="rm-month${i===3?" current":""}">
-    ${m}${i===3?'<div class="rm-today" style="height:${(PROJECTS.length*33+40)}px;"></div>':''}
-  </div>`).join("");
+function toggleStatusDrop(id,e){
+  e.stopPropagation();
+  const menu=document.getElementById("sdmenu-"+id);
+  const isOpen=menu.classList.contains("open");
+  if(openStatusDrop&&openStatusDrop!==id){
+    const prev=document.getElementById("sdmenu-"+openStatusDrop);
+    if(prev)prev.classList.remove("open");
+  }
+  menu.classList.toggle("open",!isOpen);
+  openStatusDrop=isOpen?null:id;
+}
 
-  const bars = PROJECTS.map(p=>{
-    const left = ((p.rm[0]-1)/12)*W;
-    const w = ((p.rm[1]-p.rm[0]+1)/12)*W;
-    const col = STATUS_COLOR[p.status];
+function changeStatus(id,status){
+  const p=state.projects.find(p=>p.id===id);
+  if(p){p.status=status;saveState();renderProjects();renderRoadmap();}
+  if(openStatusDrop){
+    const m=document.getElementById("sdmenu-"+openStatusDrop);
+    if(m)m.classList.remove("open");
+    openStatusDrop=null;
+  }
+}
+
+function togglePctPop(id,e){
+  e.stopPropagation();
+  const pop=document.getElementById("pct-pop-"+id);
+  const isOpen=pop.classList.contains("open");
+  if(openPctPop&&openPctPop!==id){
+    const prev=document.getElementById("pct-pop-"+openPctPop);
+    if(prev)prev.classList.remove("open");
+  }
+  pop.classList.toggle("open",!isOpen);
+  openPctPop=isOpen?null:id;
+}
+
+function updatePct(id,val){
+  document.getElementById("pct-val-"+id).textContent=val+"%";
+  const p=state.projects.find(p=>p.id===id);
+  if(p){
+    p.pct=parseInt(val);
+    const fills=document.querySelectorAll(`[data-id="${id}"] .pbar-fill`);
+    fills.forEach(f=>f.style.width=val+"%");
+    const pcts=document.querySelectorAll(`#pct-sl-${id}`);
+  }
+}
+
+function saveField(id,field,val){
+  const p=state.projects.find(p=>p.id===id);
+  if(p&&val.trim()){p[field]=val.trim();saveState();}
+}
+
+function saveNote(id,val){
+  state.notes[id]=val;
+  saveState();
+}
+
+function deleteProject(id){
+  if(!confirm("Supprimer ce projet ? Cette action est irréversible."))return;
+  state.projects=state.projects.filter(p=>p.id!==id);
+  saveState();renderProjects();renderRoadmap();
+  showToast("Projet supprimé");
+}
+
+// MODAL ADD/EDIT
+function openAddModal(){
+  document.getElementById("modal-title").textContent="Nouveau projet";
+  document.getElementById("modal-id").value="";
+  ["name","ech","jalon","inter","risque"].forEach(f=>document.getElementById("f-"+f).value="");
+  document.getElementById("f-comment").value="";
+  document.getElementById("f-pct").value=0;
+  document.getElementById("f-status").value="oncourse";
+  document.getElementById("f-prio").value="M";
+  document.getElementById("modal-bg").classList.add("open");
+}
+
+function closeModal(){document.getElementById("modal-bg").classList.remove("open");}
+
+function saveModal(){
+  const id=document.getElementById("modal-id").value;
+  const name=document.getElementById("f-name").value.trim();
+  if(!name){alert("Le nom est obligatoire.");return;}
+  const data={
+    name,cat:document.getElementById("f-cat").value,
+    status:document.getElementById("f-status").value,
+    prio:document.getElementById("f-prio").value,
+    pct:parseInt(document.getElementById("f-pct").value)||0,
+    ech:document.getElementById("f-ech").value||"À définir",
+    jalon:document.getElementById("f-jalon").value||"À définir",
+    inter:document.getElementById("f-inter").value||"—",
+    risque:document.getElementById("f-risque").value||"—",
+    comment:document.getElementById("f-comment").value||"",
+    rm:[1,12]
+  };
+  if(id){
+    const idx=state.projects.findIndex(p=>p.id===parseInt(id));
+    if(idx>=0)state.projects[idx]={...state.projects[idx],...data};
+  }else{
+    const newId=Math.max(0,...state.projects.map(p=>p.id))+1;
+    state.projects.push({id:newId,...data});
+  }
+  saveState();renderProjects();renderRoadmap();closeModal();
+  showToast(id?"Projet mis à jour ✓":"Nouveau projet ajouté ✓");
+}
+
+function updateCounts(){
+  document.getElementById("cnt-tot").textContent=state.projects.length;
+  document.getElementById("cnt-enc").textContent=state.projects.filter(p=>p.status==="oncourse").length;
+  document.getElementById("cnt-ris").textContent=state.projects.filter(p=>p.status==="atrisque").length;
+  document.getElementById("cnt-blo").textContent=state.projects.filter(p=>p.status==="bloque").length;
+  document.getElementById("cnt-ter").textContent=state.projects.filter(p=>p.status==="termine").length;
+}
+
+// ALERTS
+function renderAlerts(){
+  const urgent=state.projects.filter(p=>p.status==="bloque"||p.status==="atrisque");
+  const pills=document.getElementById("alert-pills");
+  if(!urgent.length){document.getElementById("alert-banner").style.display="none";return;}
+  pills.innerHTML=urgent.map(p=>`<span class="alert-pill">${p.name} — ${p.ech}</span>`).join("");
+}
+
+// ROADMAP
+function renderRoadmap(){
+  const hdr=MONTHS.map((m,i)=>`<div class="rm-m${i===3?" cur":""}">${m}</div>`).join("");
+  const bars=state.projects.map(p=>{
+    const l=((p.rm[0]-1)/12)*100;
+    const w=((p.rm[1]-p.rm[0]+1)/12)*100;
+    const c=SCOL[p.status];
     return `<div class="rm-row">
-      <div class="rm-label" title="${p.name}">${p.id}. ${p.name}</div>
+      <div class="rm-lbl" title="${p.name}">${p.id}. ${p.name}</div>
       <div class="rm-track">
-        <div class="rm-bar" style="left:${left}%;width:${w}%;background:${col}" title="${p.name} — ${STATUS_LABEL[p.status]} — ${p.ech}">
-          <div class="rm-progress" style="width:${p.pct}%;background:#fff"></div>
-          <span style="position:relative;z-index:1">${p.pct>0?p.pct+'%':''}</span>
+        <div class="rm-bar" style="left:${l}%;width:${w}%;background:${c}" title="${p.name} (${SL[p.status]})">
+          <div class="rm-prog" style="width:${p.pct}%;background:#fff"></div>
+          <span style="position:relative;z-index:1;font-size:.6rem;color:#fff;padding:0 3px;font-weight:600">${p.pct>0?p.pct+"%":""}</span>
         </div>
       </div>
     </div>`;
   }).join("");
-
-  const todayPct = (TODAY_M/12)*100;
-  const todayLine = `<div style="position:absolute;left:calc(200px + ${todayPct}% * (100% - 200px) / 100);top:0;bottom:0;width:1.5px;background:#DC2626;opacity:0.5;pointer-events:none;z-index:20;"></div>`;
-
-  document.getElementById("roadmap-container").innerHTML = `
+  const tp=(TODAY_M/12)*100;
+  document.getElementById("rm-container").innerHTML=`
     <div style="position:relative">
-      ${todayLine}
-      <div class="roadmap-header">${hdr}</div>
+      <div style="position:absolute;left:calc(200px + ${tp}% * (100% - 200px) / 100);top:0;bottom:0;width:1.5px;background:#DC2626;opacity:.5;z-index:10;pointer-events:none"></div>
+      <div class="rm-hdr">${hdr}</div>
       ${bars}
-    </div>
-  `;
+    </div>`;
 }
 
-function renderFlux() {
-  const el = document.getElementById("flux-list");
-  el.innerHTML = FLUX.map(f=>`
+// FLUX
+function renderFlux(){
+  const FLUX=[
+    {t:"Réponse appel d'offres IT",o:"Direction achats",p:"H",e:"02/05/2026",s:"atrisque",a:"Rédiger et envoyer avant le 02/05"},
+    {t:"Point trimestriel CODIR",o:"DG",p:"H",e:"05/05/2026",s:"atrisque",a:"Préparer bilan programme + alertes"},
+    {t:"Révision budget Q2",o:"Finance",p:"M",e:"08/05/2026",s:"oncourse",a:"Vérifier cohérence budgets INI27"},
+    {t:"Présentation board projets",o:"DG",p:"H",e:"28/05/2026",s:"planifier",a:"Préparer synthèse programme 1 page"},
+    {t:"Relance UVCW (4 tentatives)",o:"TOPIII + Évaluation",p:"H",e:"Urgent",s:"bloque",a:"Escalade politique — impliquer Bruno / Mathieu Perin"},
+    {t:"Relance Agence du Numérique",o:"NIS2",p:"H",e:"Urgent",s:"bloque",a:"Courrier co-signé Desquesnes / Jeholet à préparer"},
+    {t:"Dossier budget INI27",o:"GPL + SDG + PCS",p:"H",e:"T1 2027",s:"atrisque",a:"3 projets bloqués — dossier consolidé à instruire"},
+  ];
+  document.getElementById("flux-list").innerHTML=FLUX.map(f=>`
     <div class="flux-row">
-      <div><div class="flux-title">${f.title}</div><div class="flux-orig">${f.orig}</div></div>
-      <div style="font-size:0.8rem;color:#64748B;align-self:center">${f.ech}</div>
-      <div style="align-self:center"><span class="prio p-${f.prio}">${f.prio}</span></div>
-      <div style="align-self:center"><span class="status-badge ${STATUS_CLASS[f.status]}">${STATUS_LABEL[f.status]}</span></div>
-      <div class="flux-action" style="align-self:center">${f.action}</div>
-    </div>
-  `).join("");
+      <div><div class="ft">${f.t}</div><div class="fo">${f.o}</div></div>
+      <div style="font-size:.75rem;color:var(--muted)">${f.e}</div>
+      <div><span class="prio-dot p-${f.p}">${f.p}</span></div>
+      <div><span class="sbadge ${SC[f.s]}">${SL[f.s]}</span></div>
+      <div class="fa">${f.a}</div>
+    </div>`).join("");
 }
 
-function updateCounts() {
-  document.getElementById("cnt-cours").textContent = PROJECTS.filter(p=>p.status==="oncourse").length;
-  document.getElementById("cnt-risk").textContent  = PROJECTS.filter(p=>p.status==="atrisque").length;
-  document.getElementById("cnt-bloc").textContent  = PROJECTS.filter(p=>p.status==="bloque").length;
-  document.getElementById("cnt-done").textContent  = PROJECTS.filter(p=>p.status==="termine").length;
+// REMINDER
+function openReminder(){
+  const today=new Date();
+  const urgent=state.projects.filter(p=>p.status==="bloque"||p.status==="atrisque");
+  const lines=["RAPPELS PROGRAMME — Cabinet Desquesnes","Généré le "+today.toLocaleDateString("fr-BE"),"","--- PROJETS À RISQUE / BLOQUÉS ---",""];
+  urgent.forEach(p=>lines.push(`• ${p.name} [${SL[p.status].toUpperCase()}]
+  Échéance: ${p.ech}
+  Prochain jalon: ${p.jalon}
+  Risque: ${p.risque}
+`));
+  lines.push("","--- ACTIONS IMMÉDIATES ---","");
+  const blocked=state.projects.filter(p=>p.status==="bloque");
+  blocked.forEach(p=>lines.push(`⚠️ BLOQUÉ: ${p.name} → ${p.jalon}`));
+  document.getElementById("reminder-content").textContent=lines.join("\n");
+  document.getElementById("reminder-bg").classList.add("open");
 }
 
-updateCounts();
-renderProjects("all");
+function closeReminder(){document.getElementById("reminder-bg").classList.remove("open");}
+
+function sendReminder(){
+  const content=document.getElementById("reminder-content").textContent;
+  const subject="[Programme Cabinet] Rappels pilotage — "+new Date().toLocaleDateString("fr-BE");
+  window.location.href="mailto:?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(content);
+}
+
+// EXPORT / IMPORT
+function exportData(){
+  const data=JSON.stringify({projects:state.projects,notes:state.notes},null,2);
+  const blob=new Blob([data],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="pilotage-cabinet-"+new Date().toISOString().slice(0,10)+".json";
+  a.click();
+  showToast("Données exportées ✓");
+}
+
+function importData(){document.getElementById("import-input").click();}
+
+function handleImport(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(d.projects){state.projects=d.projects;state.notes=d.notes||{};saveState();renderProjects();renderRoadmap();renderAlerts();showToast("Données importées ✓");}
+    }catch(err){alert("Fichier invalide.");}
+  };
+  reader.readAsText(file);
+  e.target.value="";
+}
+
+// CLOSE DROPDOWNS ON CLICK OUTSIDE
+document.addEventListener("click",()=>{
+  if(openStatusDrop){document.getElementById("sdmenu-"+openStatusDrop)?.classList.remove("open");openStatusDrop=null;}
+  if(openPctPop){
+    const p=state.projects.find(x=>x.id===openPctPop);
+    if(p){
+      const sl=document.getElementById("pct-sl-"+openPctPop);
+      if(sl){p.pct=parseInt(sl.value);saveState();renderProjects();}
+    }
+    document.getElementById("pct-pop-"+openPctPop)?.classList.remove("open");
+    openPctPop=null;
+  }
+});
+
+document.getElementById("modal-bg").addEventListener("click",e=>{if(e.target===document.getElementById("modal-bg"))closeModal();});
+document.getElementById("reminder-bg").addEventListener("click",e=>{if(e.target===document.getElementById("reminder-bg"))closeReminder();});
+
+// INIT
+loadState();
+renderProjects();
 renderRoadmap();
 renderFlux();
+renderAlerts();
 </script>
 </body>
 </html>
