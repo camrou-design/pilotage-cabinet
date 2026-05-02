@@ -7,6 +7,7 @@
 <title>Pilotage réformes — Cabinet Desquesnes</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
@@ -194,6 +195,7 @@ body{
 }
 .act-btn:hover{background:var(--border);border-color:var(--border)}
 .act-btn.del:hover{background:var(--crimson-l)}
+.act-btn.canvas-btn:hover{background:var(--gold-l);border-color:rgba(184,134,11,.3)}
 
 .det-row{display:none}
 .det-row.open{display:table-row}
@@ -264,13 +266,14 @@ body{
 /* FLUX */
 .flux-wrap{padding:1.25rem}
 .flux-add{
-  display:grid;grid-template-columns:1.3fr 1fr 70px 120px 1.4fr auto;
+  display:grid;grid-template-columns:1.2fr 0.8fr 0.8fr 60px 105px 1.2fr auto;
   gap:8px;margin-bottom:12px
 }
 .flux-hdr-row,.flux-row{
-  display:grid;grid-template-columns:1fr 140px 70px 120px 220px;
+  display:grid;grid-template-columns:1fr 100px 90px 60px 110px 1fr;
   gap:10px
 }
+.flux-row-acts{display:flex;gap:2px}
 .flux-hdr-row{
   padding:6px 10px;font-size:.65rem;font-weight:600;text-transform:uppercase;
   letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border)
@@ -458,9 +461,11 @@ body{
   margin-bottom:.875rem;padding-bottom:.625rem;border-bottom:1px solid var(--border)
 }
 .cv-val-form{
-  display:grid;grid-template-columns:1fr 1fr 1.5fr auto;
-  gap:10px;align-items:end;margin-bottom:.875rem
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:10px;align-items:end;margin-bottom:.75rem
 }
+.cf-label{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-bottom:3px}
+.cf-input,.cf-select{border:1px solid var(--border);border-radius:var(--r4);padding:7px 9px;font-family:var(--font-body);font-size:.8rem;color:var(--ink);width:100%;background:var(--card)}
 .cv-log{width:100%;border-collapse:collapse;font-size:.72rem}
 .cv-log th,.cv-log td{border:1px solid var(--border);padding:6px 8px;vertical-align:top}
 .cv-log th{
@@ -595,12 +600,29 @@ body{
         <div class="flux-add">
           <input class="finput" id="flux-title" placeholder="Sujet du flux">
           <input class="finput" id="flux-origin" placeholder="Origine">
+          <input class="finput" id="flux-ech" placeholder="Échéance">
           <select class="fselect" id="flux-prio"><option value="H">H</option><option value="M" selected>M</option><option value="L">L</option></select>
           <select class="fselect" id="flux-status"><option value="planifier">À planifier</option><option value="oncourse">En cours</option><option value="atrisque">À risque</option><option value="bloque">Bloqué</option><option value="termine">Terminé</option></select>
           <input class="finput" id="flux-action" placeholder="Action à mener">
           <button class="btn btn-primary" onclick="addFluxFromForm()">Ajouter</button>
         </div>
-        <div class="flux-hdr-row"><div>Sujet</div><div>Origine</div><div>Priorité</div><div>Statut</div><div>Action à mener</div></div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px">
+          <select class="fselect" id="flux-proj-sel"><option value="">— Aucun projet associé —</option></select>
+          <span style="font-size:.7rem;color:var(--muted);align-self:center;white-space:nowrap">Lier à un projet (optionnel)</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <button class="btn btn-ghost" style="font-size:.75rem;padding:5px 12px" onclick="openEmailPaste()">📧 Analyser email</button>
+          <button class="btn btn-ghost" style="font-size:.75rem;padding:5px 12px" onclick="openWeeklyReport()">📊 Rapport hebdo</button>
+        </div>
+        <div class="filter-bar" style="padding:.5rem 0;border-bottom:none;margin-bottom:4px">
+          <span class="filter-label">Vue :</span>
+          <button class="fc flux-fc active" data-f="all" onclick="fpFlux('all',this)">Tous</button>
+          <button class="fc flux-fc" data-f="bloque" onclick="fpFlux('bloque',this)">Bloqués</button>
+          <button class="fc flux-fc" data-f="atrisque" onclick="fpFlux('atrisque',this)">À risque</button>
+          <button class="fc flux-fc" data-f="oncourse" onclick="fpFlux('oncourse',this)">En cours</button>
+          <button class="fc flux-fc" data-f="termine" onclick="fpFlux('termine',this)">Terminés</button>
+        </div>
+        <div class="flux-hdr-row"><div>Sujet</div><div>Origine</div><div>Échéance</div><div>Pri.</div><div>Statut</div><div>Action à mener</div></div>
         <div id="flux-list"></div>
       </div>
     </div>
@@ -652,6 +674,11 @@ body{
 <div class="modal-overlay" id="rem-ov">
   <div class="modal">
     <div class="modal-hdr">Rappels par email</div>
+    <div class="fg full" style="margin-bottom:.875rem">
+      <label class="flabel">Destinataires</label>
+      <input class="finput" id="rem-to" placeholder="prenom.nom@spw.wallonie.be, autre@exemple.be">
+      <span style="font-size:.65rem;color:var(--muted);margin-top:3px;display:block">Séparez plusieurs adresses par une virgule — sauvegardé automatiquement</span>
+    </div>
     <div class="reminder-pre" id="rem-content"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeRem()">Fermer</button>
@@ -660,7 +687,78 @@ body{
   </div>
 </div>
 
+<div class="modal-overlay" id="pdf-sel-ov">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-hdr">Export PDF — Sélection des projets</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;align-items:center">
+      <span class="filter-label">Sélection :</span>
+      <button class="btn btn-ghost" style="padding:4px 10px;font-size:.75rem" onclick="pdfSelAll(true)">Tous</button>
+      <button class="btn btn-ghost" style="padding:4px 10px;font-size:.75rem" onclick="pdfSelAll(false)">Aucun</button>
+    </div>
+    <div id="pdf-sel-list" style="max-height:360px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r8);padding:6px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closePdfSel()">Annuler</button>
+      <button class="btn btn-primary" onclick="exportSelectedPdf()">Exporter en PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="word-res-ov">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-hdr">Import Word — Résultats</div>
+    <div id="word-res-content" style="max-height:400px;overflow-y:auto"></div>
+    <div style="margin-top:.875rem;padding:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r4);font-size:.7rem;color:var(--muted)">
+      <strong>Format attendu dans le document Word :</strong><br>
+      <em>Nom du projet</em> (ligne seule) suivi de <em>Champ : valeur</em><br>
+      Champs dashboard : <code>Statut</code>, <code>Avancement</code>, <code>Jalon</code>, <code>Risque</code>, <code>Échéance</code><br>
+      Champs canvas : <code>Enjeux</code>, <code>Périmètre</code>, <code>Risques</code>, <code>Intervenants</code>… ou format inline <em>Projet / Champ : valeur</em>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeWordRes()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="email-paste-ov">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-hdr">Analyser un email — proposer une tâche</div>
+    <div class="fg full" style="margin-bottom:.875rem">
+      <label class="flabel">Coller le texte de l'email</label>
+      <textarea class="ftextarea" id="email-paste-area" style="min-height:140px" placeholder="Coller ici le contenu de l'email (De :, Objet :, corps…)"></textarea>
+    </div>
+    <div id="email-analysis" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r8);padding:1rem;margin-bottom:.875rem">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:.75rem">Tâche proposée</div>
+      <div class="form-grid">
+        <div class="fg full"><label class="flabel">Titre</label><input class="finput" id="ea-title"></div>
+        <div class="fg"><label class="flabel">Origine</label><input class="finput" id="ea-origin"></div>
+        <div class="fg"><label class="flabel">Échéance</label><input class="finput" id="ea-ech"></div>
+        <div class="fg"><label class="flabel">Priorité</label><select class="fselect" id="ea-prio"><option value="H">H — Haute</option><option value="M" selected>M — Moyenne</option><option value="L">L — Basse</option></select></div>
+        <div class="fg"><label class="flabel">Projet lié</label><select class="fselect" id="ea-proj"><option value="">— Aucun —</option></select></div>
+        <div class="fg full"><label class="flabel">Action à mener</label><input class="finput" id="ea-action"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeEmailPaste()">Fermer</button>
+      <button class="btn btn-ghost" onclick="analyzeEmailPaste()">Analyser ↓</button>
+      <button class="btn btn-primary" id="ea-confirm-btn" style="display:none" onclick="confirmEmailTask()">Ajouter la tâche</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="weekly-rep-ov">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-hdr">Rapport hebdomadaire des tâches</div>
+    <div id="weekly-rep-content" style="max-height:500px;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeWeeklyReport()">Fermer</button>
+      <button class="btn btn-ghost" onclick="sendWeeklyReportEmail()">📧 Envoyer par email</button>
+      <button class="btn btn-primary" onclick="exportWeeklyReportPdf()">📄 Export PDF</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+<input type="file" id="word-import" accept=".docx" style="display:none" onchange="handleWordImport(event)">
 
 <div class="fab">
   <span class="fab-save-ind" id="save-ind">—</span>
@@ -672,6 +770,8 @@ body{
   <button class="fab-btn fab-edit" id="edit-btn" onclick="toggleEdit()">✏️ Modifier</button>
   <button class="fab-btn fab-add" id="add-btn" onclick="openAddModal()">+ Projet</button>
   <button class="fab-btn" id="cv-pdf-btn" style="display:none;background:rgba(26,107,69,.4);color:#6EE7B7" onclick="exportCanvasPdf()">📄 PDF Canvas</button>
+  <button class="fab-btn" style="background:rgba(26,107,69,.25);color:#86EFAC" onclick="openPdfSel()">📄 PDF Programme</button>
+  <button class="fab-btn" title="Importer un fichier Word (.docx) pour mettre à jour les projets" onclick="document.getElementById('word-import').click()" style="background:rgba(29,78,216,.25);color:#93C5FD">📝 Import Word</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -752,10 +852,15 @@ let editMode = false;
 let openDetail = null;
 let openDropId = null;
 let openPctId = null;
+let openFluxDropId = null;
 let chatOpen = false;
 
 function esc(v){
   return String(v ?? "").replace(/[&<>"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));
+}
+
+function normalizeStr(s){
+  return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim();
 }
 
 function loadState(){
@@ -815,6 +920,21 @@ function toggleEdit(){
   if(editMode) toast("Mode édition activé");
 }
 
+function cvStatusDot(projId){
+  const cv = getCanvasData(projId);
+  const vs = cv ? cv.validationState : "À compléter";
+  const map = {
+    "Validé":               ["●","var(--emerald)","Canvas validé"],
+    "Validé avec réserves": ["◑","var(--emerald)","Validé avec réserves"],
+    "Validation requise":   ["●","var(--amber)",  "Validation requise"],
+    "À revoir":             ["●","var(--crimson)", "Canvas à revoir"],
+    "Refusé":               ["●","var(--crimson)", "Canvas refusé"],
+    "À compléter":          ["◦","var(--muted)",   "Canvas à compléter"]
+  };
+  const [sym,col,tip] = map[vs] || ["●","var(--muted)",vs];
+  return `<span title="${esc(tip)}" style="font-size:.6rem;color:${col};flex-shrink:0;line-height:1;cursor:default">${sym}</span>`;
+}
+
 function renderProjects(f){
   const activeF = f || document.querySelector(".fc.active")?.dataset?.f || "all";
   const ord = {bloque:0,atrisque:1,oncourse:2,planifier:3,termine:4};
@@ -828,7 +948,10 @@ function renderProjects(f){
       <tr class="proj-row" data-id="${p.id}">
         <td style="font-family:var(--font-mono);font-size:.65rem;color:#C4C3BB">${p.id}</td>
         <td>
-          <div class="pname" ${editMode ? `contenteditable="true" onblur="sf(${p.id},'name',this.textContent)"` : `onclick="td(${p.id})"`}>${esc(p.name)}</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <div class="pname" ${editMode ? `contenteditable="true" onblur="sf(${p.id},'name',this.textContent)"` : `onclick="td(${p.id})"`}>${esc(p.name)}</div>
+            ${cvStatusDot(p.id)}
+          </div>
           <span class="pcat-tag">${esc(p.cat)}</span>
         </td>
         <td>
@@ -859,6 +982,7 @@ function renderProjects(f){
         <td class="risk-text" ${editMode ? `contenteditable="true" onblur="sf(${p.id},'risque',this.textContent)"` : ""}>${esc(p.risque)}</td>
         <td>
           <div class="row-acts">
+            <button class="act-btn canvas-btn" title="Ouvrir le canvas &amp; demander une validation" onclick="openCanvasFromRow(${p.id})">📋</button>
             <button class="act-btn" onclick="td(${p.id})">📝</button>
             ${editMode ? `<button class="act-btn del" onclick="delP(${p.id})">×</button>` : ""}
           </div>
@@ -877,6 +1001,7 @@ function renderProjects(f){
                 <div class="det-val" ${editMode ? `contenteditable="true" onblur="sf(${p.id},'comment',this.textContent)"` : ""}>${esc(p.comment)}</div>
               </div>
             </div>
+            ${(()=>{const linkedTasks=(state.flux||[]).filter(f=>f.projId===p.id);return linkedTasks.length?`<div style="margin-bottom:.875rem"><div class="det-label" style="margin-bottom:5px">Tâches liées (${linkedTasks.length})</div>${linkedTasks.map(f=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 9px;border-radius:var(--r4);border:1px solid var(--border);margin-bottom:3px;background:var(--card);font-size:.75rem"><span style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:${SCOL[f.s]||"#94A3B8"}"></span><span style="flex:1">${esc(f.t)}</span><span class="prio p-${f.p}" style="font-size:.6rem">${f.p}</span><span style="font-size:.72rem;color:var(--muted)">${esc(f.e||"")}</span><button class="act-btn" style="opacity:.6" onclick="unlinkFluxFromProj(${f.id})" title="Délier">×</button></div>`).join("")}</div>`:"";})()}
             <div class="notes-label">Notes personnelles</div>
             <textarea class="notes-ta" onblur="saveNote(${p.id},this.value)">${esc(note)}</textarea>
           </div>
@@ -1021,16 +1146,92 @@ function renderRoadmap(){
     </div>`;
 }
 
-function renderFlux(){
+function renderFlux(filter){
   state.flux = state.flux || [];
-  document.getElementById("flux-list").innerHTML = state.flux.map(f=>`
+  refreshFluxProjOptions();
+  const activeF = filter || document.querySelector(".flux-fc.active")?.dataset?.f || "all";
+  const ord = {bloque:0,atrisque:1,oncourse:2,planifier:3,termine:4};
+  const pOrd = {H:0,M:1,L:2};
+  let data = activeF === "all" ? state.flux : state.flux.filter(f=>f.s===activeF);
+  data = [...data].sort((a,b)=>(ord[a.s]||9)-(ord[b.s]||9)||(pOrd[a.p]||9)-(pOrd[b.p]||9));
+
+  document.getElementById("flux-list").innerHTML = data.map(f=>`
     <div class="flux-row">
-      <div><div class="ft">${esc(f.t)}</div><div class="fo">De : ${esc(f.o)}</div></div>
-      <div class="ech-text">${esc(f.e)}</div>
-      <div><span class="prio p-${f.p}">${f.p}</span></div>
-      <div><span class="badge ${SC[f.s] || "b-pla"}">${SL[f.s] || f.s}</span></div>
-      <div class="fa"><span>${esc(f.a)}</span><button class="act-btn del" onclick="delFlux(${f.id})">×</button></div>
+      <div>
+        <div class="ft" contenteditable="true" onblur="editFlux(${f.id},'t',this.textContent)">${esc(f.t)}</div>
+        <div class="fo">De : <span contenteditable="true" onblur="editFlux(${f.id},'o',this.textContent)">${esc(f.o)}</span></div>
+        ${f.projId ? `<div style="margin-top:3px"><span style="font-size:.62rem;background:var(--blue-l);color:var(--blue);border:1px solid rgba(29,78,216,.2);border-radius:3px;padding:1px 6px;cursor:pointer" onclick="changeFluxProj(${f.id},event)" title="Cliquer pour changer">${esc(state.projects.find(p=>p.id===f.projId)?.name||"Projet supprimé")}</span></div>` : `<div style="margin-top:3px"><span style="font-size:.62rem;color:var(--muted);cursor:pointer;border-bottom:1px dashed var(--border)" onclick="changeFluxProj(${f.id},event)">+ Lier un projet</span></div>`}
+      </div>
+      <div class="ech-text" contenteditable="true" onblur="editFlux(${f.id},'e',this.textContent)">${esc(f.e)}</div>
+      <div>
+        <span class="prio p-${f.p}" onclick="cycleFluxPrio(${f.id})" style="cursor:pointer" title="Clic pour changer la priorité">${f.p}</span>
+      </div>
+      <div>
+        <div class="sdrop">
+          <span class="badge ${SC[f.s]||"b-pla"}" onclick="toggleFluxDrop(${f.id},event)">${SL[f.s]||f.s}</span>
+          <div class="sdrop-menu" id="fsdm-${f.id}">
+            ${Object.entries(SL).map(([k,v])=>`<div class="sdrop-item" onclick="chFluxStatus(${f.id},'${k}')">${v}</div>`).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="fa">
+        <span contenteditable="true" onblur="editFlux(${f.id},'a',this.textContent)">${esc(f.a)}</span>
+        <div class="flux-row-acts">
+          <button class="act-btn" title="Promouvoir en projet structuré" onclick="promoteFlux(${f.id})">🚀</button>
+          <button class="act-btn del" onclick="delFlux(${f.id})">×</button>
+        </div>
+      </div>
     </div>`).join("");
+}
+
+function fpFlux(f, btn){
+  document.querySelectorAll(".flux-fc").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderFlux(f);
+}
+
+function toggleFluxDrop(id, e){
+  e.stopPropagation();
+  const menu = document.getElementById("fsdm-"+id);
+  const was = menu.classList.contains("open");
+  if(openFluxDropId && openFluxDropId !== id) document.getElementById("fsdm-"+openFluxDropId)?.classList.remove("open");
+  menu.classList.toggle("open", !was);
+  openFluxDropId = was ? null : id;
+}
+
+function chFluxStatus(id, status){
+  const f = state.flux.find(f=>f.id===id);
+  if(f){ f.s=status; saveState(); renderFlux(); }
+}
+
+function editFlux(id, field, val){
+  const f = state.flux.find(f=>f.id===id);
+  if(f && val.trim()){ f[field]=val.trim(); saveState(); }
+}
+
+function cycleFluxPrio(id){
+  const f = state.flux.find(f=>f.id===id);
+  if(!f) return;
+  f.p = {H:"M",M:"L",L:"H"}[f.p] || "M";
+  saveState(); renderFlux();
+}
+
+function promoteFlux(id){
+  const f = state.flux.find(f=>f.id===id);
+  if(!f || !confirm(`Promouvoir "${f.t}" en projet structuré ?`)) return;
+  document.getElementById("modal-title").textContent = "Nouveau projet (depuis flux)";
+  document.getElementById("modal-id").value = "";
+  document.getElementById("f-name").value = f.t;
+  document.getElementById("f-ech").value = (f.e && f.e !== "À définir") ? f.e : "";
+  document.getElementById("f-comment").value = (f.a && f.a !== "À définir") ? f.a : "";
+  document.getElementById("f-jalon").value = "";
+  document.getElementById("f-inter").value = "";
+  document.getElementById("f-risque").value = "";
+  document.getElementById("f-pct").value = 0;
+  document.getElementById("f-status").value = f.s || "planifier";
+  document.getElementById("f-prio").value = f.p || "M";
+  window._promoteFluxId = id;
+  document.getElementById("modal-ov").classList.add("open");
 }
 
 function addFluxFromForm(){
@@ -1045,12 +1246,14 @@ function addFluxFromForm(){
     t:title,
     o:document.getElementById("flux-origin").value.trim() || "—",
     p:document.getElementById("flux-prio").value,
-    e:"À définir",
+    e:document.getElementById("flux-ech").value.trim() || "À définir",
     s:document.getElementById("flux-status").value,
-    a:document.getElementById("flux-action").value.trim() || "À définir"
+    a:document.getElementById("flux-action").value.trim() || "À définir",
+    projId:parseInt(document.getElementById("flux-proj-sel").value)||null
   });
 
-  ["flux-title","flux-origin","flux-action"].forEach(id=>document.getElementById(id).value="");
+  ["flux-title","flux-origin","flux-ech","flux-action"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("flux-proj-sel").value="";
   saveState();
   renderFlux();
 }
@@ -1113,6 +1316,14 @@ function saveModal(){
   renderRoadmap();
   renderAlerts();
   renderCanvasList();
+
+  if(window._promoteFluxId){
+    state.flux = state.flux.filter(f=>f.id!==window._promoteFluxId);
+    window._promoteFluxId = null;
+    saveState();
+    renderFlux();
+    toast("Élément promu en projet ✓");
+  }
   closeModal();
 }
 
@@ -1128,6 +1339,7 @@ function openRem(){
 `));
 
   document.getElementById("rem-content").textContent = lines.join("\n");
+  document.getElementById("rem-to").value = localStorage.getItem("rem-to-v1") || "";
   document.getElementById("rem-ov").classList.add("open");
 }
 
@@ -1136,9 +1348,11 @@ function closeRem(){
 }
 
 function sendRem(){
+  const to = document.getElementById("rem-to").value.trim();
+  if(to) localStorage.setItem("rem-to-v1", to);
   const body = document.getElementById("rem-content").textContent;
   const subj = "[Programme Cabinet] Rappels — " + new Date().toLocaleDateString("fr-BE");
-  window.location.href = "mailto:?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
+  window.location.href = "mailto:" + to + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
 }
 
 function exportData(){
@@ -1486,6 +1700,48 @@ function initCanvasForProject(p){
   return cv;
 }
 
+const CV_FIELD_ALIASES = {
+  "enjeux":"enjeux","problematique":"enjeux","enjeu":"enjeux",
+  "perimetre":"perimetre","scope":"perimetre",
+  "echeances":"echeances","echeance":"echeances","jalons":"echeances",
+  "budget":"budget","ressources":"budget",
+  "intervenants":"intervenants","acteurs":"intervenants",
+  "publics":"publics","cibles":"publics","publics cibles":"publics",
+  "risques":"risques","risque":"risques",
+  "contraintes":"contraintes","contrainte":"contraintes",
+  "interdependances":"interdependances","interdependance":"interdependances",
+  "points d attention":"pointsAttention","points attention":"pointsAttention","vigilance":"pointsAttention",
+  "objectifs":"objectifs","objectif":"objectifs",
+  "suivi":"suivi","approche":"suivi","pilotage":"suivi",
+  "livrables":"livrables","livrable":"livrables"
+};
+
+/* PDF SELECTION */
+function openPdfSel(){
+  const ord = {bloque:0,atrisque:1,oncourse:2,planifier:3,termine:4};
+  const sorted = [...state.projects].sort((a,b)=>ord[a.status]-ord[b.status]);
+  document.getElementById("pdf-sel-list").innerHTML = sorted.map(p=>{
+    const cv = getCanvasData(p.id);
+    const vs = cv ? cv.validationState : "À compléter";
+    return `<label style="display:flex;align-items:center;gap:8px;padding:7px 8px;cursor:pointer;border-radius:var(--r4);border-bottom:1px solid var(--border)">
+      <input type="checkbox" class="pdf-sel-cb" value="${p.id}" checked style="accent-color:var(--gold);width:14px;height:14px;flex-shrink:0">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.8rem;font-weight:600;color:var(--ink)">${esc(p.name)}</div>
+        <div style="font-size:.65rem;color:var(--muted)">${esc(p.cat)} · ${SL[p.status]||p.status} · ${esc(vs)}</div>
+      </div>
+    </label>`;
+  }).join("");
+  document.getElementById("pdf-sel-ov").classList.add("open");
+}
+function pdfSelAll(v){ document.querySelectorAll(".pdf-sel-cb").forEach(cb=>cb.checked=v); }
+function closePdfSel(){ document.getElementById("pdf-sel-ov").classList.remove("open"); }
+function exportSelectedPdf(){
+  const ids = [...document.querySelectorAll(".pdf-sel-cb:checked")].map(cb=>parseInt(cb.value,10));
+  if(!ids.length){ alert("Sélectionnez au moins un projet."); return; }
+  closePdfSel();
+  exportAllCanvasPdf(ids);
+}
+
 function renderCanvasList(){
   const list = document.getElementById("cv-proj-list");
   if(!list) return;
@@ -1503,6 +1759,7 @@ function renderCanvasList(){
         <div class="cp-name">${esc(p.name)}</div>
         <div class="cp-meta">${esc(p.cat)} · ${SL[p.status] || p.status}</div>
         <span class="cp-vs ${vsc}">${vs}</span>
+        ${cv && cv.lastModified ? `<div style="font-size:.58rem;color:var(--muted);margin-top:3px">Modifié ${esc(cv.lastModified)}</div>` : ""}
       </div>`;
   }).join("");
 }
@@ -1517,6 +1774,7 @@ function openCanvas(projId){
   document.getElementById("cv-pdf-btn").style.display = "inline-flex";
 
   const vsc = CV_VSTYLE[cv.validationState] || "cv-pend";
+  const remEmail = localStorage.getItem("rem-to-v1") || "";
 
   document.getElementById("cv-main").innerHTML = `
     <div>
@@ -1525,9 +1783,12 @@ function openCanvas(projId){
           <span style="font-family:'Roboto Slab',serif;font-size:1rem;font-weight:700;color:var(--ink)">${esc(p.name)}</span>
           <span class="badge ${SC[p.status] || "b-pla"}">${SL[p.status] || p.status}</span>
         </div>
-        <div style="display:flex;gap:6px">
-          <span style="font-size:.72rem;color:var(--muted);align-self:center">v${cv.version}</span>
-          <span class="cp-vs ${vsc}">${cv.validationState}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="font-size:.72rem;color:var(--muted)">v${cv.version}</span>
+            <span class="cp-vs ${vsc}">${cv.validationState}</span>
+          </div>
+          ${cv.lastModified ? `<span style="font-size:.62rem;color:var(--muted)">Modifié le ${esc(cv.lastModified)}</span>` : ""}
         </div>
       </div>
 
@@ -1580,7 +1841,13 @@ function openCanvas(projId){
               <label class="cf-label">Commentaire / portée</label>
               <input class="cf-input" id="cv-com" placeholder="Portée de l’avenant, réserve, motif…">
             </div>
-            <button class="btn btn-primary" onclick="cvInscribeValidation(${projId})">Inscrire</button>
+            <div>
+              <label class="cf-label">Notifier par email (preuve)</label>
+              <input class="cf-input" id="cv-email" type="email" placeholder="adresse@exemple.be" value="${esc(remEmail)}">
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:.875rem">
+            <button class="btn btn-primary" onclick="cvInscribeValidation(${projId})">Inscrire &amp; notifier</button>
           </div>
 
           <table class="cv-log">
@@ -1591,6 +1858,7 @@ function openCanvas(projId){
                 <th>Validé par</th>
                 <th>Décision</th>
                 <th>Commentaire</th>
+                <th>Notifié</th>
               </tr>
             </thead>
             <tbody>
@@ -1602,8 +1870,9 @@ function openCanvas(projId){
                     <td>${esc(v.who)}</td>
                     <td><span class="cp-vs ${CV_VSTYLE[v.dec] || "cv-pend"}">${esc(v.dec)}</span></td>
                     <td>${esc(v.com)}</td>
+                    <td>${v.email ? `<a href="mailto:${esc(v.email)}" style="color:var(--blue);font-size:.68rem">${esc(v.email)}</a>` : '<span style="color:var(--muted)">—</span>'}</td>
                   </tr>`).join("")
-                : `<tr><td colspan="5" style="color:var(--muted);font-style:italic">Aucune validation inscrite.</td></tr>`}
+                : `<tr><td colspan="6" style="color:var(--muted);font-style:italic">Aucune validation inscrite.</td></tr>`}
             </tbody>
           </table>
         </div>
@@ -1617,6 +1886,7 @@ function cvSaveField(projId,key,val){
 
   cv.fields[key] = val;
   cv.validationState = "Validation requise";
+  cv.lastModified = new Date().toLocaleString("fr-BE");
   saveCanvasData(projId,cv);
   renderCanvasList();
   toast("Canvas sauvegardé ✓");
@@ -1625,10 +1895,12 @@ function cvSaveField(projId,key,val){
 function cvInscribeValidation(projId){
   const cv = getCanvasData(projId);
   if(!cv) return;
+  const p = state.projects.find(x=>x.id===projId);
 
   const who = document.getElementById("cv-who").value.trim();
   const dec = document.getElementById("cv-dec").value;
   const com = document.getElementById("cv-com").value.trim();
+  const email = document.getElementById("cv-email").value.trim();
 
   if(!who){
     alert("Indiquez la personne qui valide.");
@@ -1637,17 +1909,171 @@ function cvInscribeValidation(projId){
 
   cv.version += 1;
   cv.validationState = dec;
-  cv.validations.push({
-    date:new Date().toLocaleString("fr-BE"),
-    version:cv.version,
-    who,
-    dec,
-    com
+  const dateStr = new Date().toLocaleString("fr-BE");
+  cv.lastModified = dateStr;
+  cv.validations.push({ date:dateStr, version:cv.version, who, dec, com, email:email||null });
+
+  saveCanvasData(projId, cv);
+  if(email) localStorage.setItem("rem-to-v1", email);
+
+  openCanvas(projId);
+  toast("Validation inscrite ✓" + (email ? " — email ouvert" : ""));
+
+  if(email){
+    const pName = p ? p.name : "Projet #"+projId;
+    const subj = "[Validation Canvas] " + pName + " — v" + cv.version + " — " + dec;
+    const body = [
+      "PREUVE DE VALIDATION — Canvas projet",
+      "======================================",
+      "",
+      "Projet      : " + pName,
+      "Version     : v" + cv.version,
+      "Date        : " + dateStr,
+      "Validé par  : " + who,
+      "Décision    : " + dec,
+      "Commentaire : " + (com || "—"),
+      "",
+      "Ce message a été généré automatiquement depuis l'outil de pilotage du Cabinet Desquesnes.",
+      "Il constitue la preuve d'envoi de la décision de validation."
+    ].join("\n");
+    window.location.href = "mailto:" + email + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
+  }
+}
+
+function openCanvasFromRow(projId){
+  const p = state.projects.find(x=>x.id===projId);
+  if(!p) return;
+
+  // Mettre à jour l'état AVANT le rendu pour que le badge soit correct
+  const cv = initCanvasForProject(p);
+  const wasAlreadyPending = cv.validationState === "Validation requise";
+  if(!wasAlreadyPending){
+    cv.validationState = "Validation requise";
+    saveCanvasData(projId, cv);
+  }
+
+  // Basculer vers l'onglet Canvas
+  const tabBtn = [...document.querySelectorAll('.tn')].find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes('canvas'));
+  if(tabBtn){ sw('canvas', tabBtn); }
+  renderCanvasList();
+  openCanvas(projId);
+
+  setTimeout(()=>document.querySelector(".cv-val-panel")?.scrollIntoView({behavior:"smooth",block:"nearest"}),150);
+  toast(wasAlreadyPending ? "Canvas ouvert — validation déjà en attente" : "Canvas ouvert — demande de validation créée ✓");
+}
+
+function exportAllCanvasPdf(projIds){
+  toast("Génération du PDF… Veuillez patienter.");
+  const ord = {bloque:0,atrisque:1,oncourse:2,planifier:3,termine:4};
+  const SLoc = {oncourse:"En cours",atrisque:"À risque",bloque:"Bloqué",termine:"Terminé",planifier:"À planifier"};
+  const sorted = [...state.projects]
+    .filter(p => !projIds || projIds.includes(p.id))
+    .sort((a,b)=>ord[a.status]-ord[b.status]);
+  const today = new Date().toLocaleDateString("fr-BE");
+
+  // Page de couverture
+  let html = `<div style="padding:20mm 15mm;font-family:Arial,sans-serif;">
+    <div style="border-bottom:3px solid #B8860B;padding-bottom:10px;margin-bottom:14px">
+      <div style="font-size:20px;font-weight:700;color:#12120F">Programme des réformes — Canvas projets</div>
+      <div style="font-size:11px;color:#B8860B;margin-top:4px">Cabinet de François Desquesnes · VP Territoire, Infrastructures, Mobilité, Pouvoirs Locaux</div>
+    </div>
+    <div style="font-size:10px;color:#555;margin-bottom:12px">${sorted.length} projets · Généré le ${today} · Confidentiel</div>
+    <table style="width:100%;border-collapse:collapse;font-size:9px">
+      <thead><tr style="background:#12120F;color:#fff">
+        <th style="padding:4px 6px;text-align:left">Projet</th>
+        <th style="padding:4px 6px;text-align:left">Cat.</th>
+        <th style="padding:4px 6px;text-align:left">Statut</th>
+        <th style="padding:4px 6px;text-align:left">Canvas</th>
+        <th style="padding:4px 6px;text-align:left">Dernière modif.</th>
+      </tr></thead>
+      <tbody>${sorted.map((p,i)=>{
+        const cv = getCanvasData(p.id);
+        const vs = cv ? cv.validationState : "À compléter";
+        return `<tr style="background:${i%2===0?"#fff":"#F7F7F5"}">
+          <td style="padding:3px 6px;border-bottom:1px solid #eee">${esc(p.name)}</td>
+          <td style="padding:3px 6px;border-bottom:1px solid #eee">${esc(p.cat)}</td>
+          <td style="padding:3px 6px;border-bottom:1px solid #eee">${SLoc[p.status]||p.status}</td>
+          <td style="padding:3px 6px;border-bottom:1px solid #eee">${esc(vs)}</td>
+          <td style="padding:3px 6px;border-bottom:1px solid #eee">${cv&&cv.lastModified?esc(cv.lastModified):"—"}</td>
+        </tr>`;
+      }).join("")}</tbody>
+    </table>
+  </div>`;
+
+  // Une section par projet
+  sorted.forEach(p=>{
+    const cv = initCanvasForProject(p);
+    const blocksHtml = CV_BLOCKS.map(bl=>`
+      <tr>
+        <td style="width:18px;text-align:center;background:#12120F;color:#E8C547;font-weight:700;font-size:8px;padding:3px;border:1px solid #ccc">${bl.n}</td>
+        <td style="width:100px;font-weight:700;font-size:8px;padding:3px;background:#F0EFE8;border:1px solid #ccc;border-left:2px solid #B8860B">${esc(bl.b)}</td>
+        <td style="font-size:7px;color:#444;padding:3px;background:#FAFAF7;border:1px solid #ccc;width:28%">${esc(bl.q)}</td>
+        <td style="font-size:8px;padding:3px;white-space:pre-wrap;border:1px solid #ccc">${esc(cv.fields[bl.k]||"")}</td>
+      </tr>`).join("");
+
+    const valsHtml = cv.validations.length
+      ? cv.validations.map(v=>`<tr>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">${esc(v.date)}</td>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">v${v.version}</td>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">${esc(v.who)}</td>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">${esc(v.dec)}</td>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">${esc(v.com||"—")}</td>
+          <td style="padding:2px 4px;border:1px solid #ddd;font-size:7px">${esc(v.email||"—")}</td>
+        </tr>`).join("")
+      : `<tr><td colspan="6" style="padding:3px;font-style:italic;color:#888;font-size:7px;border:1px solid #ddd">Aucune validation.</td></tr>`;
+
+    html += `<div style="page-break-before:always;padding:12mm 10mm;font-family:Arial,sans-serif;">
+      <table style="width:100%;border-collapse:collapse;margin-bottom:5px">
+        <tr>
+          <td style="font-size:13px;font-weight:700;color:#12120F;border-bottom:2px solid #B8860B;padding-bottom:4px">${esc(p.name)}</td>
+          <td style="font-size:8px;color:#666;text-align:right;border-bottom:2px solid #B8860B;padding-bottom:4px;white-space:nowrap">${esc(p.cat)} · ${SLoc[p.status]||p.status} · v${cv.version} · ${esc(cv.validationState)}</td>
+        </tr>
+      </table>
+      ${cv.lastModified?`<div style="font-size:7px;color:#aaa;margin-bottom:6px">Modifié le ${esc(cv.lastModified)}</div>`:""}
+      <table style="width:100%;border-collapse:collapse;margin-bottom:8px">
+        <thead><tr style="background:#12120F;color:#fff">
+          <th style="padding:3px;text-align:left;font-size:8px">#</th>
+          <th style="padding:3px;text-align:left;font-size:8px">Bloc</th>
+          <th style="padding:3px;text-align:left;font-size:8px">Question guide</th>
+          <th style="padding:3px;text-align:left;font-size:8px">Contenu</th>
+        </tr></thead>
+        <tbody>${blocksHtml}</tbody>
+      </table>
+      <div style="font-size:8px;font-weight:700;margin-bottom:3px;color:#374151">Historique de validation</div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:#374151;color:#fff">
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Date</th>
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Ver.</th>
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Validé par</th>
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Décision</th>
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Commentaire</th>
+          <th style="padding:2px 4px;font-size:7px;text-align:left">Email</th>
+        </tr></thead>
+        <tbody>${valsHtml}</tbody>
+      </table>
+      <div style="font-size:7px;color:#bbb;margin-top:6px;text-align:right">Cabinet Desquesnes · Confidentiel · ${today}</div>
+    </div>`;
   });
 
-  saveCanvasData(projId,cv);
-  openCanvas(projId);
-  toast("Validation inscrite ✓");
+  const tmp = document.createElement("div");
+  tmp.style.cssText = "position:absolute;left:-9999px;top:0;width:210mm;background:#fff;";
+  tmp.innerHTML = html;
+  document.body.appendChild(tmp);
+
+  html2pdf().from(tmp).set({
+    margin:0,
+    filename:"programme-canvas-" + new Date().toISOString().slice(0,10) + ".pdf",
+    image:{type:"jpeg",quality:.92},
+    html2canvas:{scale:1.5,useCORS:true,logging:false},
+    jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
+    pagebreak:{mode:["css","legacy"]}
+  }).save().then(()=>{
+    document.body.removeChild(tmp);
+    toast("PDF programme exporté ✓");
+  }).catch(()=>{
+    if(document.body.contains(tmp)) document.body.removeChild(tmp);
+    toast("Erreur lors de l'export PDF");
+  });
 }
 
 function exportCanvasPdf(){
@@ -1678,13 +2104,251 @@ function exportCanvasPdf(){
   toast("Export PDF en cours…");
 }
 
+/* ── FEATURE 1 : FLUX ↔ PROJET ── */
+function refreshFluxProjOptions(){
+  const sel = document.getElementById("flux-proj-sel");
+  if(!sel) return;
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Aucun projet associé —</option>' +
+    state.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  sel.value = cur;
+}
+
+let openFluxProjId = null;
+function changeFluxProj(fluxId, e){
+  e.stopPropagation();
+  document.querySelectorAll(".flux-proj-dd").forEach(d=>d.remove());
+  if(openFluxProjId === fluxId){ openFluxProjId=null; return; }
+  openFluxProjId = fluxId;
+  const f = state.flux.find(f=>f.id===fluxId);
+  const div = document.createElement("div");
+  div.className = "flux-proj-dd";
+  div.style.cssText = "position:fixed;background:var(--card);border:1px solid var(--border);border-radius:var(--r8);box-shadow:var(--shadow-lg);z-index:300;min-width:220px;overflow:hidden";
+  div.innerHTML = `<div style="padding:4px 0">
+    <div class="sdrop-item" onclick="linkFluxProj(${fluxId},null)"><em style="color:var(--muted)">— Délier le projet</em></div>
+    ${state.projects.map(p=>`<div class="sdrop-item" style="${f&&f.projId===p.id?"font-weight:700":""}" onclick="linkFluxProj(${fluxId},${p.id})">${esc(p.name)}</div>`).join("")}
+  </div>`;
+  const rect = e.target.getBoundingClientRect();
+  div.style.top = (rect.bottom+4)+"px";
+  div.style.left = rect.left+"px";
+  document.body.appendChild(div);
+  setTimeout(()=>{ document.addEventListener("click", ()=>{ div.remove(); openFluxProjId=null; }, {once:true}); },0);
+}
+
+function linkFluxProj(fluxId, projId){
+  const f = state.flux.find(f=>f.id===fluxId);
+  if(f){ f.projId=projId||null; saveState(); renderFlux(); }
+  document.querySelectorAll(".flux-proj-dd").forEach(d=>d.remove());
+  openFluxProjId=null;
+}
+
+function unlinkFluxFromProj(fluxId){
+  const f = state.flux.find(f=>f.id===fluxId);
+  if(f){ f.projId=null; saveState(); renderProjects(); }
+}
+
+/* ── FEATURE 2 : ANALYSE EMAIL ── */
+function openEmailPaste(){
+  document.getElementById("email-paste-area").value="";
+  document.getElementById("email-analysis").style.display="none";
+  document.getElementById("ea-confirm-btn").style.display="none";
+  const sel = document.getElementById("ea-proj");
+  sel.innerHTML = '<option value="">— Aucun —</option>' + state.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  document.getElementById("email-paste-ov").classList.add("open");
+}
+function closeEmailPaste(){ document.getElementById("email-paste-ov").classList.remove("open"); }
+
+function analyzeEmailPaste(){
+  const text = document.getElementById("email-paste-area").value.trim();
+  if(!text) return;
+  const lines = text.split(/\r?\n/);
+  let from="", subject="", body=[];
+  let inHeader=true;
+  for(const line of lines){
+    const ll = line.trim();
+    if(!ll){ inHeader=false; continue; }
+    if(inHeader){
+      if(/^(de|from)\s*:/i.test(ll)){ from = ll.replace(/^(de|from)\s*:/i,"").replace(/<[^>]+>/g,"").trim(); continue; }
+      if(/^(objet|subject)\s*:/i.test(ll)){ subject = ll.replace(/^(objet|subject)\s*:/i,"").trim(); continue; }
+      if(/^(envoyé|sent|à|to|date|cc)\s*:/i.test(ll)) continue;
+    }
+    body.push(ll);
+  }
+  const bodyText = body.join(" ");
+  let action = "";
+  const actionPatterns = [
+    /(?:merci de|merci d'|il faudrait|il serait nécessaire de|pouvez-vous|je vous demande de|action\s*:)\s*(.{10,120})/i,
+    /(?:à faire|prochaine étape)\s*:?\s*(.{10,120})/i
+  ];
+  for(const pat of actionPatterns){
+    const m = bodyText.match(pat);
+    if(m){ action = m[1].replace(/\.$/, "").trim(); break; }
+  }
+  if(!action) action = body.find(l=>l.length>15&&!/^[A-Z][\w\s]+,$/.test(l))||"";
+  let ech = "";
+  const datePats = [
+    /(?:avant le|pour le|au plus tard le|d'ici le|le)\s*(\d{1,2}[\/-]\d{1,2}(?:[\/-]\d{2,4})?)/i,
+    /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})/
+  ];
+  for(const pat of datePats){
+    const m = text.match(pat);
+    if(m){ ech = m[1]; break; }
+  }
+  let prio = "M";
+  if(/\[urgent\]|urgent|asap|immédiat|impératif|prioritaire/i.test(subject+" "+bodyText)) prio="H";
+  else if(/basse priorité|pas urgent|quand (vous )?pouvez/i.test(bodyText)) prio="L";
+  let projId = "";
+  for(const p of state.projects){
+    const acronyms = p.name.match(/\b[A-Z0-9]{2,}\b/g)||[];
+    for(const ac of acronyms){
+      if(new RegExp("\\b"+ac+"\\b","i").test(text)){ projId=p.id; break; }
+    }
+    if(projId) break;
+  }
+  document.getElementById("ea-title").value = subject || body[0]?.substring(0,80)||"Email sans objet";
+  document.getElementById("ea-origin").value = from;
+  document.getElementById("ea-ech").value = ech;
+  document.getElementById("ea-prio").value = prio;
+  document.getElementById("ea-action").value = action;
+  document.getElementById("ea-proj").value = projId||"";
+  document.getElementById("email-analysis").style.display="block";
+  document.getElementById("ea-confirm-btn").style.display="inline-flex";
+}
+
+function confirmEmailTask(){
+  const title = document.getElementById("ea-title").value.trim();
+  if(!title){ alert("Le titre est obligatoire."); return; }
+  state.flux.push({
+    id:Math.max(0,...state.flux.map(f=>f.id||0))+1,
+    t:title,
+    o:document.getElementById("ea-origin").value.trim()||"Email",
+    e:document.getElementById("ea-ech").value.trim()||"À définir",
+    p:document.getElementById("ea-prio").value,
+    s:"planifier",
+    a:document.getElementById("ea-action").value.trim()||"À définir",
+    projId:parseInt(document.getElementById("ea-proj").value)||null
+  });
+  saveState(); renderFlux(); closeEmailPaste();
+  toast("Tâche ajoutée depuis l'email ✓");
+}
+
+/* ── FEATURE 3 : RAPPORT HEBDOMADAIRE ── */
+function openWeeklyReport(){
+  document.getElementById("weekly-rep-content").innerHTML = buildWeeklyReport();
+  document.getElementById("weekly-rep-ov").classList.add("open");
+}
+function closeWeeklyReport(){ document.getElementById("weekly-rep-ov").classList.remove("open"); }
+
+function parseFluxDate(ech){
+  if(!ech||ech==="À définir") return null;
+  if(/urgent/i.test(ech)) return new Date(0);
+  const m = ech.match(/(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{2,4}))?/);
+  if(m){
+    const y = m[3] ? (parseInt(m[3])<100?2000+parseInt(m[3]):parseInt(m[3])) : new Date().getFullYear();
+    return new Date(y, parseInt(m[2])-1, parseInt(m[1]));
+  }
+  return null;
+}
+
+function buildWeeklyReport(){
+  const flux = state.flux||[];
+  const now = new Date(); now.setHours(0,0,0,0);
+  const weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay()+1);
+  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6);
+  const nextWeekStart = new Date(weekEnd); nextWeekStart.setDate(weekEnd.getDate()+1);
+  const nextWeekEnd = new Date(nextWeekStart); nextWeekEnd.setDate(nextWeekStart.getDate()+6);
+  const pOrd={H:0,M:1,L:2};
+  const groups = [{key:"overdue",label:"⚠ En retard / Urgent",items:[]},
+    {key:"week",label:"📅 Cette semaine ("+weekStart.toLocaleDateString("fr-BE")+" – "+weekEnd.toLocaleDateString("fr-BE")+")",items:[]},
+    {key:"nextweek",label:"📆 Semaine prochaine",items:[]},
+    {key:"later",label:"🗓 À venir (2+ semaines)",items:[]},
+    {key:"nodate",label:"— Sans date",items:[]}
+  ];
+  const active = flux.filter(f=>f.s!=="termine");
+  for(const f of active){
+    const d = parseFluxDate(f.e);
+    let gk;
+    if(!d || f.e==="À définir") gk="nodate";
+    else if(d<=now && d.getTime()!==0) gk="overdue";
+    else if(d.getTime()===0 || /urgent/i.test(f.e)) gk="overdue";
+    else if(d>=weekStart&&d<=weekEnd) gk="week";
+    else if(d>=nextWeekStart&&d<=nextWeekEnd) gk="nextweek";
+    else gk="later";
+    groups.find(g=>g.key===gk).items.push(f);
+  }
+  groups.forEach(g=>g.items.sort((a,b)=>(pOrd[a.p]||9)-(pOrd[b.p]||9)));
+  const prioBg={H:"var(--crimson-l)",M:"var(--amber-l)",L:"var(--slate-l)"};
+  const prioColor={H:"var(--crimson)",M:"var(--amber)",L:"var(--slate)"};
+  let html = `<div style="font-size:.72rem;color:var(--muted);margin-bottom:1rem">Semaine du ${weekStart.toLocaleDateString("fr-BE")} · ${active.length} tâches actives</div>`;
+  for(const g of groups){
+    if(!g.items.length) continue;
+    html += `<div style="margin-bottom:1rem">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)">${g.label}</div>
+      ${g.items.map(f=>{
+        const proj = f.projId ? state.projects.find(p=>p.id===f.projId) : null;
+        return `<div style="display:grid;grid-template-columns:22px 1fr 70px 80px;gap:8px;align-items:center;padding:6px 8px;border-radius:var(--r4);border:1px solid var(--border);margin-bottom:3px;background:var(--card)">
+          <span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:${prioBg[f.p]||"var(--slate-l)"};color:${prioColor[f.p]||"var(--slate)"};font-size:.65rem;font-weight:700">${f.p}</span>
+          <div>
+            <div style="font-size:.8rem;font-weight:600">${esc(f.t)}</div>
+            <div style="font-size:.65rem;color:var(--muted)">${esc(f.a)} ${proj?`· <span style="color:var(--blue)">${esc(proj.name)}</span>`:""}  </div>
+          </div>
+          <span class="badge ${SC[f.s]||"b-pla"}" style="font-size:.65rem">${SL[f.s]||f.s}</span>
+          <span style="font-size:.7rem;color:var(--muted)">${esc(f.e||"—")}</span>
+        </div>`;
+      }).join("")}
+    </div>`;
+  }
+  return html || `<p style="color:var(--muted)">Aucune tâche active.</p>`;
+}
+
+function sendWeeklyReportEmail(){
+  const flux = state.flux||[];
+  const active = flux.filter(f=>f.s!=="termine");
+  const pOrd={H:0,M:1,L:2};
+  const sorted = [...active].sort((a,b)=>(pOrd[a.p]||9)-(pOrd[b.p]||9));
+  const now = new Date();
+  const lines = ["RAPPORT HEBDOMADAIRE DES TÂCHES","Semaine du "+now.toLocaleDateString("fr-BE"),"Cabinet Desquesnes","",`${active.length} tâches actives`, ""];
+  const byPrio = {H:[],M:[],L:[]};
+  for(const f of sorted)(byPrio[f.p]||byPrio.M).push(f);
+  for(const [p,items] of Object.entries(byPrio)){
+    if(!items.length) continue;
+    lines.push(`── Priorité ${p} ──`);
+    items.forEach(f=>{
+      const proj = f.projId ? state.projects.find(pr=>pr.id===f.projId) : null;
+      lines.push(`• [${SL[f.s]||f.s}] ${f.t}`);
+      lines.push(`  Échéance : ${f.e||"—"}  | Action : ${f.a||"—"}${proj?" | Projet : "+proj.name:""}`);
+      lines.push("");
+    });
+  }
+  const to = localStorage.getItem("rem-to-v1")||"";
+  const subj = "[Programme Cabinet] Rapport tâches — semaine du "+now.toLocaleDateString("fr-BE");
+  window.location.href = "mailto:"+to+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(lines.join("\n"));
+}
+
+function exportWeeklyReportPdf(){
+  toast("Génération du rapport PDF…");
+  const content = document.getElementById("weekly-rep-content");
+  if(!content) return;
+  const tmp = document.createElement("div");
+  tmp.style.cssText = "position:absolute;left:-9999px;top:0;width:180mm;background:#fff;font-family:Arial,sans-serif;padding:15mm 12mm";
+  tmp.innerHTML = `<div style="border-bottom:2px solid #B8860B;margin-bottom:12px;padding-bottom:6px">
+    <div style="font-size:15px;font-weight:700">Rapport hebdomadaire des tâches</div>
+    <div style="font-size:10px;color:#666">Cabinet Desquesnes · ${new Date().toLocaleDateString("fr-BE")}</div>
+  </div>${content.innerHTML}`;
+  document.body.appendChild(tmp);
+  html2pdf().from(tmp).set({margin:0,filename:"rapport-taches-"+new Date().toISOString().slice(0,10)+".pdf",image:{type:"jpeg",quality:.92},html2canvas:{scale:1.5,logging:false},jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}}).save().then(()=>{document.body.removeChild(tmp);toast("Rapport exporté ✓");}).catch(()=>{if(document.body.contains(tmp))document.body.removeChild(tmp);});
+}
+
 /* GLOBAL EVENTS */
 document.addEventListener("click",()=>{
   if(openDropId){
     document.getElementById("sdm-"+openDropId)?.classList.remove("open");
     openDropId = null;
   }
-
+  if(openFluxDropId){
+    document.getElementById("fsdm-"+openFluxDropId)?.classList.remove("open");
+    openFluxDropId = null;
+  }
   if(openPctId){
     commitPct(openPctId);
     document.getElementById("pp-"+openPctId)?.classList.remove("open");
@@ -1699,6 +2363,143 @@ document.getElementById("modal-ov").addEventListener("click",e=>{
 document.getElementById("rem-ov").addEventListener("click",e=>{
   if(e.target === document.getElementById("rem-ov")) closeRem();
 });
+document.getElementById("pdf-sel-ov").addEventListener("click",e=>{
+  if(e.target === document.getElementById("pdf-sel-ov")) closePdfSel();
+});
+document.getElementById("word-res-ov").addEventListener("click",e=>{
+  if(e.target === document.getElementById("word-res-ov")) closeWordRes();
+});
+document.getElementById("email-paste-ov").addEventListener("click",e=>{
+  if(e.target===document.getElementById("email-paste-ov")) closeEmailPaste();
+});
+document.getElementById("weekly-rep-ov").addEventListener("click",e=>{
+  if(e.target===document.getElementById("weekly-rep-ov")) closeWeeklyReport();
+});
+
+/* WORD IMPORT */
+function closeWordRes(){ document.getElementById("word-res-ov").classList.remove("open"); }
+
+function handleWordImport(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  e.target.value = "";
+  if(!file.name.endsWith(".docx")){
+    alert("Format non supporté. Utilisez un fichier .docx (Word 2007+).");
+    return;
+  }
+  toast("Lecture du document Word…");
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    try{
+      const result = await mammoth.extractRawText({arrayBuffer: ev.target.result});
+      processWordText(result.value);
+    }catch(err){
+      alert("Impossible de lire ce fichier. Vérifiez qu'il s'agit d'un .docx valide.");
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processWordText(text){
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length > 1);
+  const ok = [], skip = [], unknown = [];
+  let currentProject = null;
+
+  for(const line of lines){
+    const lineLow = normalizeStr(line);
+    const colonIdx = line.indexOf(":");
+
+    if(colonIdx > 0 && colonIdx < line.length - 1){
+      const beforeColon = line.substring(0, colonIdx).trim();
+      const afterColon = line.substring(colonIdx + 1).trim();
+      const beforeLow = normalizeStr(beforeColon);
+
+      if(afterColon.length > 0){
+        // Format "Projet / Champ : valeur"
+        const slashIdx = beforeColon.indexOf("/");
+        let cvFieldKey, proj;
+
+        if(slashIdx >= 0){
+          proj = findProject(normalizeStr(beforeColon.substring(0, slashIdx)));
+          cvFieldKey = CV_FIELD_ALIASES[normalizeStr(beforeColon.substring(slashIdx+1))];
+        } else {
+          cvFieldKey = CV_FIELD_ALIASES[beforeLow];
+          proj = currentProject;
+        }
+
+        const p = proj || currentProject;
+        if(p){
+          // Champ dashboard
+          if(/statut|status/.test(beforeLow)){
+            const s = parseStatus(normalizeStr(afterColon));
+            if(s){ p.status=s; ok.push(`<b>${esc(p.name)}</b> — Statut → ${SL[s]}`); currentProject=p; continue; }
+          }
+          if(/avancement|pct/.test(beforeLow)){
+            const pct = parseInt(afterColon,10);
+            if(!isNaN(pct)&&pct>=0&&pct<=100){ p.pct=pct; ok.push(`<b>${esc(p.name)}</b> — Avancement → ${pct}%`); currentProject=p; continue; }
+          }
+          if(/^jalon/.test(beforeLow)){
+            p.jalon=afterColon; ok.push(`<b>${esc(p.name)}</b> — Jalon → ${esc(afterColon)}`); currentProject=p; continue;
+          }
+          if(/^risque(?! )/.test(beforeLow) && !cvFieldKey){
+            p.risque=afterColon; ok.push(`<b>${esc(p.name)}</b> — Risque → ${esc(afterColon)}`); currentProject=p; continue;
+          }
+          if(/ech.ance/.test(beforeLow)){
+            p.ech=afterColon; ok.push(`<b>${esc(p.name)}</b> — Échéance → ${esc(afterColon)}`); currentProject=p; continue;
+          }
+          // Champ canvas
+          if(cvFieldKey){
+            const cv = initCanvasForProject(p);
+            cv.fields[cvFieldKey] = afterColon;
+            cv.validationState = "Validation requise";
+            cv.lastModified = new Date().toLocaleString("fr-BE");
+            saveCanvasData(p.id, cv);
+            const blName = CV_BLOCKS.find(b=>b.k===cvFieldKey)?.b || cvFieldKey;
+            ok.push(`<b>${esc(p.name)}</b> — Canvas <em>${blName}</em> mis à jour`);
+            currentProject = p; continue;
+          }
+        }
+      }
+    }
+
+    // Ligne seule = nom de projet (contexte)
+    if(line.length < 80 && !line.includes(":")){
+      const proj = findProject(lineLow);
+      if(proj){ currentProject=proj; skip.push(`→ Contexte : <b>${esc(proj.name)}</b>`); continue; }
+    }
+
+    // Tentative comme commande chatbot inline (ex: "RGCC terminé")
+    const p = findProject(lineLow);
+    if(p){
+      const changes = [];
+      const s = parseStatus(lineLow); if(s&&s!==p.status){ p.status=s; changes.push(`Statut → ${SL[s]}`); }
+      const pct = parsePct(lineLow); if(pct!==null&&pct!==p.pct){ p.pct=pct; changes.push(`Avancement → ${pct}%`); }
+      const jm = line.match(/jalon[:\s]+(.+)/i); if(jm){ p.jalon=jm[1].trim(); changes.push(`Jalon → ${esc(p.jalon)}`); }
+      const rm = line.match(/risque[:\s]+(.+)/i); if(rm){ p.risque=rm[1].trim(); changes.push(`Risque → ${esc(p.risque)}`); }
+      const em = line.match(/ech.ance[:\s]+(.+)/i); if(em){ p.ech=em[1].trim(); changes.push(`Échéance → ${esc(p.ech)}`); }
+      if(changes.length){ ok.push(`<b>${esc(p.name)}</b> — ${changes.join(", ")}`); currentProject=p; continue; }
+    }
+
+    unknown.push(esc(line.length>70 ? line.substring(0,70)+"…" : line));
+  }
+
+  saveState(); renderProjects(); renderRoadmap(); renderAlerts(); renderCanvasList();
+
+  let html = "";
+  if(ok.length) html += `<div style="margin-bottom:10px">
+    <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--emerald);margin-bottom:5px">Mis à jour (${ok.length})</div>
+    ${ok.map(m=>`<div style="font-size:.8rem;padding:4px 0;border-bottom:1px solid var(--border)">${m}</div>`).join("")}</div>`;
+  if(skip.length) html += `<div style="margin-bottom:10px">
+    <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Contextes détectés (${skip.length})</div>
+    ${skip.map(m=>`<div style="font-size:.75rem;color:var(--muted);padding:2px 0">${m}</div>`).join("")}</div>`;
+  if(unknown.length) html += `<div>
+    <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:4px">Non reconnus (${unknown.length})</div>
+    ${unknown.map(m=>`<div style="font-size:.75rem;color:var(--amber);padding:2px 0">— ${m}</div>`).join("")}</div>`;
+  if(!html) html = `<p style="color:var(--muted);font-size:.85rem">Aucune modification détectée dans ce document.</p>`;
+
+  document.getElementById("word-res-content").innerHTML = html;
+  document.getElementById("word-res-ov").classList.add("open");
+}
 
 /* INIT */
 loadState();
